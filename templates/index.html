@@ -423,14 +423,7 @@
 
 			function moveRequest() {
 				httpRequest = new XMLHttpRequest();
-				var parameters = new Object();
-				parameters.m0 = m[0];
-				parameters.m1 = m[1];
-				parameters.m2 = m[2];
-				parameters.m3 = m[3];
-				parameters.m4 = m[4];
-				parameters.m5 = m[5];
-				parameters = JSON.stringify(parameters);
+				parameters = JSON.stringify(sequences);
 				if (!httpRequest) {
 					alert('XMLHTTP 인스턴스를 만들 수가 없어요 ㅠㅠ');
 					return false;

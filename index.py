@@ -1,17 +1,24 @@
 from flask import Flask,render_template,request
 import json
 import csv
+import time
 
 app = Flask(__name__)
+
+motor_busy = 0
 
 @app.route("/")
 def hello():
     return render_template('index.html')
     
 @app.route("/move",methods=['POST'])
-def test():
+def move():
     m=json.loads(request.data)
-
+    for motor_s in m:
+        motor_busy = move_motor(motor_s)
+        while motor_busy:
+            time.sleep(0.1)
+                    
 
     return "done!"
 
@@ -43,6 +50,12 @@ def save():
 
     outfile.close()
     return filename + '으로 저장되었습니다.'
+
+def move_motor(motor):
+    print(motor)
+    time.sleep(1)
+    return 0
+
 
 if __name__ == '__main__':
    app.run(debug = True)
