@@ -27,6 +27,11 @@
 			position:static;
 			display:inline-block;
 		}
+		#blockDiagram{
+			position:static;
+			display:block;
+			background-color: aliceblue;
+		}
 
 		a {
 			color: skyblue
@@ -49,6 +54,11 @@
 			width: 60px;
 			text-align: center;
 		}
+		.block{
+			display:inline-block;
+			background-color: aquamarine;
+			width:30px;
+		}
 
 	</style>
 </head>
@@ -65,7 +75,17 @@
 		<input type="range" min="-130" max="130" value="0" class="slider" id="m3">
 		<input type="range" min="-130" max="130" value="0" class="slider" id="m4">
 		<input type="range" min="-130" max="130" value="0" class="slider" id="m5">
+		<button id="createBlockButton">CreateBlock</button>
 	</div>
+	<div><button id="loadButton">Load!</button></div>
+	<div id="blockDiagram"></div>
+	<div>
+		<button id="moveBlockUp">GoUp!</button>
+		<button id="moveBlockDown">GoDown!</button>
+		<button id="deleteBlock">Delete!</button>
+		<button id="saveButton">Save!</button>
+	</div>
+	<div><button id="moveButton">GO!</button></div>
 
 	<script src="{{ url_for('static', filename='js/three.js') }}"></script>
 
@@ -76,6 +96,7 @@
 	<script src="{{ url_for('static', filename='js/OrbitControls.js') }}"></script>
 
 	<script>
+		// GUI 관련 script
 		if (WEBGL.isWebGLAvailable() === false) {
 
 			document.body.appendChild(WEBGL.getWebGLErrorMessage());
@@ -86,7 +107,7 @@
 
 		var camera, cameraTarget, scene, renderer;
 
-		var parts=[];
+		var parts = [];
 		var geomet = [];
 		var allReady = [];
 
@@ -97,40 +118,40 @@
 		let r3 = 223;
 		let r3_ = 127.5;
 		let r4 = 70;
-		
-		let l0 = [0,0,0];
-		let l1 = [0,r1,0];
-		let l2 = [0,r2,0];
-		let l3 = [0,r3,0];
-		let l3_ = [0,r3_,0]
-		let l4 = [0,r4,0];
+
+		let l0 = [0, 0, 0];
+		let l1 = [0, r1, 0];
+		let l2 = [0, r2, 0];
+		let l3 = [0, r3, 0];
+		let l3_ = [0, r3_, 0]
+		let l4 = [0, r4, 0];
 		let p0 = l0;
-		let p1 = addByElement(l0,l1);
-		let p2 = addByElement(p1,l2);
-		let p2_ = addByElement(p2,l3_);
-		let p3 = addByElement(p2,l3);
-		let p4 = addByElement(p3,l4);
-		let t1=0;
-		let t2=0;
-		let t3=0;
-		let m = [0,0,0,0,0,0];
+		let p1 = addByElement(l0, l1);
+		let p2 = addByElement(p1, l2);
+		let p2_ = addByElement(p2, l3_);
+		let p3 = addByElement(p2, l3);
+		let p4 = addByElement(p3, l4);
+		let t1 = 0;
+		let t2 = 0;
+		let t3 = 0;
+		let m = [0, 0, 0, 0, 0, 0];
 
 		init();
 		animate();
-		
+
 
 		function init() {
 
-			container =	document.getElementById("container")
+			container = document.getElementById("container")
 
-			camera = new THREE.PerspectiveCamera(35, window.innerWidth / (window.innerHeight-300), 1, 10000);
+			camera = new THREE.PerspectiveCamera(35, window.innerWidth / (window.innerHeight - 300), 1, 10000);
 			camera.position.set(0, 670, 1400);
 
 			cameraTarget = new THREE.Vector3(0, 400, 0);
 
 			scene = new THREE.Scene();
 			scene.background = new THREE.Color(0x72645b);
-			
+
 
 			// Ground
 
@@ -159,8 +180,8 @@
 				geomet[0] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[0]=mesh;
-				mesh.position.set(0, 65/2, 0);
+				parts[0] = mesh;
+				mesh.position.set(0, 65 / 2, 0);
 
 				mesh.castShadow = true;
 				mesh.receiveShadow = true;
@@ -173,9 +194,9 @@
 				geomet[1] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[1]=mesh;
+				parts[1] = mesh;
 				mesh.position.set(0, 65, 0);
-				geometry.translate(0,222.5/2,0);
+				geometry.translate(0, 222.5 / 2, 0);
 				mesh.rotation.set(0, 0, 0);
 				mesh.scale.set(1, 1, 1);
 
@@ -190,9 +211,9 @@
 				geomet[2] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[2]=mesh;
+				parts[2] = mesh;
 				mesh.position.set(0, 231.5, 0);
-				geometry.translate(0,101.1,0);
+				geometry.translate(0, 101.1, 0);
 				mesh.rotation.set(0, 0, 0);
 				mesh.scale.set(1, 1, 1);
 
@@ -206,9 +227,9 @@
 				geomet[3] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[3]=mesh;
+				parts[3] = mesh;
 				mesh.position.set(0, 452.6, 0);
-				geometry.translate(0,36.3,0);
+				geometry.translate(0, 36.3, 0);
 				mesh.rotation.set(0, 0, 0);
 				mesh.scale.set(1, 1, 1);
 
@@ -222,9 +243,9 @@
 				geomet[4] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[4]=mesh;
+				parts[4] = mesh;
 				mesh.position.set(0, 452.6, 0);
-				geometry.translate(0,65,0);
+				geometry.translate(0, 65, 0);
 				mesh.rotation.set(0, 0, 0);
 				mesh.scale.set(1, 1, 1);
 
@@ -238,9 +259,9 @@
 				geomet[5] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
-				parts[5]=mesh;
+				parts[5] = mesh;
 				mesh.position.set(0, 675.6, 0);
-				geometry.translate(0,3,0);
+				geometry.translate(0, 3, 0);
 				mesh.rotation.set(0, 0, 0);
 				mesh.scale.set(1, 1, 1);
 
@@ -262,7 +283,7 @@
 				antialias: true
 			});
 			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight-300);
+			renderer.setSize(window.innerWidth, window.innerHeight - 300);
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
@@ -270,7 +291,7 @@
 			renderer.shadowMap.enabled = true;
 			var controls = new THREE.OrbitControls(camera, renderer.domElement);
 			container.appendChild(renderer.domElement);
-			
+
 
 
 			//
@@ -306,61 +327,63 @@
 
 		function onWindowResize() {
 
-			camera.aspect = window.innerWidth / (window.innerHeight-300);
+			camera.aspect = window.innerWidth / (window.innerHeight - 300);
 			camera.updateProjectionMatrix();
 
-			renderer.setSize(window.innerWidth , window.innerHeight -300);
+			renderer.setSize(window.innerWidth, window.innerHeight - 300);
 
 		}
 
-		function getRangeValue(){
-			m[0] = document.getElementById("m0").value*Math.PI/180;
-			m[1] = document.getElementById("m1").value*Math.PI/180;
-			m[2] = document.getElementById("m2").value*Math.PI/180;
-			m[3] = document.getElementById("m3").value*Math.PI/180;
-			m[4] = document.getElementById("m4").value*Math.PI/180;
-			m[5] = document.getElementById("m5").value*Math.PI/180;
+		function getRangeValue() {
+			m[0] = document.getElementById("m0").value * Math.PI / 180;
+			m[1] = document.getElementById("m1").value * Math.PI / 180;
+			m[2] = document.getElementById("m2").value * Math.PI / 180;
+			m[3] = document.getElementById("m3").value * Math.PI / 180;
+			m[4] = document.getElementById("m4").value * Math.PI / 180;
+			m[5] = document.getElementById("m5").value * Math.PI / 180;
 		}
-		
-		function setPosition(){
-			if(allReady.length==6){
-				l2=[Math.sin(m[0])*Math.sin(m[1])*r2,Math.cos(m[0])*r2,Math.sin(m[0])*Math.cos(m[1])*r2];
-				l3_=[Math.sin(m[0]+m[2])*Math.sin(m[1])*r3_,Math.cos(m[0]+m[2])*r3_,Math.sin(m[0]+m[2])*Math.cos(m[1])*r3_]
-				l3=[Math.sin(m[0]+m[2])*Math.sin(m[1])*r3,Math.cos(m[0]+m[2])*r3,Math.sin(m[0]+m[2])*Math.cos(m[1])*r3]
-				var axisX = new THREE.Vector3( Math.cos(m[3]), 0, Math.sin(-m[3]) ).normalize();
-				var axisY = new THREE.Vector3( 0, 1, 0 ).normalize();
+
+		function setPosition() {
+			if (allReady.length == 6) {
+				l2 = [Math.sin(m[0]) * Math.sin(m[1]) * r2, Math.cos(m[0]) * r2, Math.sin(m[0]) * Math.cos(m[1]) * r2];
+				l3_ = [Math.sin(m[0] + m[2]) * Math.sin(m[1]) * r3_, Math.cos(m[0] + m[2]) * r3_, Math.sin(m[0] + m[2]) * Math.cos(
+					m[1]) * r3_]
+				l3 = [Math.sin(m[0] + m[2]) * Math.sin(m[1]) * r3, Math.cos(m[0] + m[2]) * r3, Math.sin(m[0] + m[2]) * Math.cos(m[1]) *
+					r3
+				]
+				var axisX = new THREE.Vector3(Math.cos(m[3]), 0, Math.sin(-m[3])).normalize();
+				var axisY = new THREE.Vector3(0, 1, 0).normalize();
 
 				let p0 = l0;
-				let p1 = addByElement(l0,l1);
-				let p2 = addByElement(p1,l2);
-				let p2_ = addByElement(p2,l3_);
-				let p3 = addByElement(p2,l3);
-				let p4 = addByElement(p3,l4);
+				let p1 = addByElement(l0, l1);
+				let p2 = addByElement(p1, l2);
+				let p2_ = addByElement(p2, l3_);
+				let p3 = addByElement(p2, l3);
+				let p4 = addByElement(p3, l4);
 
-				parts[0].rotation.set(0,m[1],0,"YXZ");
-				parts[1].rotation.set(0,m[1],0,"YXZ");
-				parts[2].rotation.set(m[0],m[1],0,"YXZ");
-				parts[3].rotation.set(m[0]+m[2],m[1],0,"YXZ");
-				parts[4].rotation.set(m[0]+m[2],m[1],0,"YXZ");
-				parts[5].rotation.set(m[0]+m[2]+t1,m[1]+t2,t3,"YXZ");
+				parts[0].rotation.set(0, m[1], 0, "YXZ");
+				parts[1].rotation.set(0, m[1], 0, "YXZ");
+				parts[2].rotation.set(m[0], m[1], 0, "YXZ");
+				parts[3].rotation.set(m[0] + m[2], m[1], 0, "YXZ");
+				parts[4].rotation.set(m[0] + m[2], m[1], 0, "YXZ");
+				parts[5].rotation.set(m[0] + m[2] + t1, m[1] + t2, t3, "YXZ");
 
-				parts[5].rotateOnAxis(axisX,m[4]);
-				parts[5].rotateOnAxis(axisY,m[3])
+				parts[5].rotateOnAxis(axisX, m[4]);
+				parts[5].rotateOnAxis(axisY, m[3])
 
-				geomet[4].rotateY(m[3]-C_M3);
-				//geomet[5].rotateY(m[3]-C_M3)
-				
+				geomet[4].rotateY(m[3] - C_M3);
+
 				C_M3 = m[3];
 				C_M4 = m[4];
 
-				parts[3].position.set(p2[0],p2[1],p2[2]);
-				parts[4].position.set(p2_[0],p2_[1],p2_[2]);
-				parts[5].position.set(p3[0],p3[1],p3[2]);
+				parts[3].position.set(p2[0], p2[1], p2[2]);
+				parts[4].position.set(p2_[0], p2_[1], p2_[2]);
+				parts[5].position.set(p3[0], p3[1], p3[2]);
 			}
 		}
 
-		function addByElement(a,b){
-			return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
+		function addByElement(a, b) {
+			return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 		}
 
 		function animate() {
@@ -382,6 +405,197 @@
 			renderer.render(scene, camera);
 
 		}
+	</script>
+	<script>
+		//움직이는 request와 이벤트리스터 등록
+		var sequences = new Array();
+		var selected_number = 0; // 0은 선택 안된 상황 1부터 시작
+		(function () {
+			var httpRequest;
+			//이벤트 리스너 등록
+			document.getElementById("moveButton").addEventListener('click', moveRequest);
+			document.getElementById("createBlockButton").addEventListener('click', function(){createBlock('currentData');},false); // 지금 모터 파라미터로 새로운 블럭을 만듦
+			document.getElementById("saveButton").addEventListener('click', saveBlock);
+			document.getElementById("loadButton").addEventListener('click', function(){loadBlock(createBlock);},false);
+			document.getElementById("moveBlockUp").addEventListener('click', moveBlockUp);
+			document.getElementById("moveBlockDown").addEventListener('click', moveBlockDown);
+			document.getElementById("deleteBlock").addEventListener('click', deleteBlock);
+
+			function moveRequest() {
+				httpRequest = new XMLHttpRequest();
+				var parameters = new Object();
+				parameters.m0 = m[0];
+				parameters.m1 = m[1];
+				parameters.m2 = m[2];
+				parameters.m3 = m[3];
+				parameters.m4 = m[4];
+				parameters.m5 = m[5];
+				parameters = JSON.stringify(parameters);
+				if (!httpRequest) {
+					alert('XMLHTTP 인스턴스를 만들 수가 없어요 ㅠㅠ');
+					return false;
+				}
+				httpRequest.onreadystatechange = alertContents;
+				httpRequest.open('POST', 'move');
+
+				httpRequest.send(parameters);
+			}
+
+			function alertContents() {
+				if (httpRequest.readyState === XMLHttpRequest.DONE) {
+					if (httpRequest.status === 200) {
+						alert(httpRequest.responseText);
+					} else {
+						alert('request에 뭔가 문제가 있어요.');
+					}
+				}
+			}
+			//Block 컨트롤 관련 functions
+			
+			function createBlock(data) {
+				console.log(data)
+				if (data == "noData") {
+					return false;
+				} else if (data == "currentData") {
+					var temp = new Object();
+					temp.m0 = m[0];
+					temp.m1 = m[1];
+					temp.m2 = m[2];
+					temp.m3 = m[3];
+					temp.m4 = m[4];
+					temp.m5 = m[5];
+					sequences.push(temp);
+				} else {
+					try {
+						sequences = JSON.parse(data);
+					} catch (e) {
+						sequences = data;
+					}
+				}
+				document.getElementById("blockDiagram").innerHTML = "";
+				for (var i = 0; i < Object.keys(sequences).length; i++) {
+					var title = document.createElement("h3");
+					var div = document.createElement("div");
+					var displaytitle = document.createTextNode((i + 1).toString());
+					title.appendChild(displaytitle);
+					div.appendChild(title);
+					div.id = i+1;
+					div.className = "block";
+					div.onclick = selected;
+					document.getElementById("blockDiagram").appendChild(div);
+				}
+			}
+
+			function selected(){
+				if(selected_number==parseInt(this.id)){
+					for (var i = 1; i <= Object.keys(sequences).length; i++) {
+						document.getElementById(i.toString()).style.backgroundColor="aquamarine";
+					}
+					selected_number = 0;
+				}else{
+					for (var i = 1; i <= Object.keys(sequences).length; i++) {
+						if(i==this.id){
+							document.getElementById(i.toString()).style.backgroundColor="orange";
+							var currentBlockValue = sequences[i-1];
+							document.getElementById("m0").value = currentBlockValue['m0']*180/Math.PI;
+							document.getElementById("m1").value = currentBlockValue['m1']*180/Math.PI;
+							document.getElementById("m2").value = currentBlockValue['m2']*180/Math.PI;
+							document.getElementById("m3").value = currentBlockValue['m3']*180/Math.PI;
+							document.getElementById("m4").value = currentBlockValue['m4']*180/Math.PI;
+							document.getElementById("m5").value = currentBlockValue['m5']*180/Math.PI;
+						}else{
+							document.getElementById(i.toString()).style.backgroundColor="aquamarine";
+						}
+						selected_number = parseInt(this.id);
+					}
+				}
+			}
+
+			function moveBlockUp(){
+				if(selected_number==0||selected_number==1){
+					alert("블록 선택이 잘못되었습니다.");
+				}else{
+					var temp = sequences[selected_number-2];
+					sequences[selected_number-2] = sequences[selected_number-1];
+					sequences[selected_number-1] = temp;
+					document.getElementById((selected_number).toString()).style.backgroundColor="aquamarine";
+					document.getElementById((selected_number-1).toString()).style.backgroundColor="orange";
+					selected_number-=1;
+				}
+			}
+
+			function moveBlockDown(){
+				if(selected_number==sequences.length||selected_number==0){
+					alert("블록 선택이 잘못되었습니다.");
+				}else{
+					var temp = sequences[selected_number];
+					sequences[selected_number] = sequences[selected_number-1];
+					sequences[selected_number-1] = temp;
+					document.getElementById((selected_number).toString()).style.backgroundColor="aquamarine";
+					document.getElementById((selected_number+1).toString()).style.backgroundColor="orange";
+					selected_number+=1;
+				}
+			}
+
+			function loadBlock(callback) {
+				blockDiv = document.getElementById("blockDiagram");
+				var filename = prompt("불러올 이름을 입력해주세요.", "");
+
+				var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE) {
+						console.log(xhr.response);
+						console.log(xhr.responseText);
+						callback(xhr.response);
+					}
+				}
+				xhr.open('POST', 'load', true);
+				xhr.onerror = function (e) {
+					console.error(xhr.statusText);
+				};
+				xhr.send(filename);
+			}
+
+			function deleteBlock(){
+				if(selected_number>sequences.length||selected_number==0){
+					alert("블록 선택이 잘못되었습니다.");
+				}else{
+					delete sequences[selected_number-1];
+					document.getElementById((selected_number).toString()).style.backgroundColor="aquamarine";
+					selected_number=0;
+					sequences = sequences.filter(Boolean);
+					createBlock(sequences);
+				}
+			}
+
+			function saveBlock() {
+				var filename = prompt("동작 이름을 입력해주세요.", "");
+				var temp = new Object();
+				temp.motor = sequences;
+				temp.name = filename;
+				var saveParameters = JSON.stringify(temp);
+				console.log(saveParameters);
+				var httpRequest;
+				
+				httpRequest = new XMLHttpRequest();
+
+				httpRequest.onreadystatechange = alertContents;
+				httpRequest.open('POST', 'save');
+
+				httpRequest.send(saveParameters);
+				
+
+				function alertContents() {
+					if (httpRequest.readyState === XMLHttpRequest.DONE) {
+						if (httpRequest.status === 200) {
+							alert(httpRequest.responseText);
+						} else {
+							alert('request에 뭔가 문제가 있어요.');
+						}
+					}
+				}
+			}
+		})();
 	</script>
 </body>
 
