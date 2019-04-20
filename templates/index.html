@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>ROBOTARM CONTRLOER</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			font-family: Monospace;
+			background-color: #000000;
+			margin: 0px;
+			overflow: hidden;
+		}
+
+		#info {
+			color: #fff;
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			display: block;
+
+		}
+		#control{
+			position:static;
+			display:inline-block;
+		}
+
+		a {
+			color: skyblue
+		}
+
+		.button {
+			background: #999;
+			color: #eee;
+			padding: 0.2em 0.5em;
+			cursor: pointer
+		}
+
+		.highlight {
+			background: orange;
+			color: #fff;
+		}
+
+		span {
+			display: inline-block;
+			width: 60px;
+			text-align: center;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="info">
+		ROBOTARM CONTROLER BY HYEOKJU JANG
+	</div>
+	<div id="container"></div>
+	<div id="control">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m1">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m0">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m2">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m3">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m4">
+		<input type="range" min="-130" max="130" value="0" class="slider" id="m5">
+	</div>
+
+	<script src="{{ url_for('static', filename='js/three.js') }}"></script>
+
+	<script src="{{ url_for('static', filename='js/STLLoader.js') }}"></script>
+
+	<script src="{{ url_for('static', filename='js/WebGL.js') }}"></script>
+
+	<script src="{{ url_for('static', filename='js/OrbitControls.js') }}"></script>
+
+	<script>
+		if (WEBGL.isWebGLAvailable() === false) {
+
+			document.body.appendChild(WEBGL.getWebGLErrorMessage());
+
+		}
+
+		var container, stats;
+
+		var camera, cameraTarget, scene, renderer;
+
+		var parts=[];
+		var geomet = [];
+		var allReady = [];
+
+		let C_M4 = 0; //current m4 
+		let C_M3 = 0;
+		let r1 = 231.5;
+		let r2 = 221.1;
+		let r3 = 223;
+		let r3_ = 127.5;
+		let r4 = 70;
+		
+		let l0 = [0,0,0];
+		let l1 = [0,r1,0];
+		let l2 = [0,r2,0];
+		let l3 = [0,r3,0];
+		let l3_ = [0,r3_,0]
+		let l4 = [0,r4,0];
+		let p0 = l0;
+		let p1 = addByElement(l0,l1);
+		let p2 = addByElement(p1,l2);
+		let p2_ = addByElement(p2,l3_);
+		let p3 = addByElement(p2,l3);
+		let p4 = addByElement(p3,l4);
+		let t1=0;
+		let t2=0;
+		let t3=0;
+		let m = [0,0,0,0,0,0];
+
+		init();
+		animate();
+		
+
+		function init() {
+
+			container =	document.getElementById("container")
+
+			camera = new THREE.PerspectiveCamera(35, window.innerWidth / (window.innerHeight-300), 1, 10000);
+			camera.position.set(0, 670, 1400);
+
+			cameraTarget = new THREE.Vector3(0, 400, 0);
+
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0x72645b);
+			
+
+			// Ground
+
+			var plane = new THREE.Mesh(
+				new THREE.PlaneBufferGeometry(40000, 40000),
+				new THREE.MeshPhongMaterial({
+					color: 0x999999,
+					specular: 0x101010
+				})
+			);
+			plane.rotation.x = -Math.PI / 2;
+			plane.position.y = 0;
+			scene.add(plane);
+
+			plane.receiveShadow = true;
+
+
+			// ASCII file
+			var material = new THREE.MeshPhongMaterial({
+				color: 0xAAAAAA,
+				specular: 0x111111,
+				shininess: 200
+			});
+			var loader = new THREE.STLLoader();
+			loader.load("{{url_for('static',filename='STL/base.STL')}}", function (geometry) {
+				geomet[0] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[0]=mesh;
+				mesh.position.set(0, 65/2, 0);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+
+			loader.load("{{url_for('static',filename='STL/sholder.STL')}}", function (geometry) {
+				geomet[1] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[1]=mesh;
+				mesh.position.set(0, 65, 0);
+				geometry.translate(0,222.5/2,0);
+				mesh.rotation.set(0, 0, 0);
+				mesh.scale.set(1, 1, 1);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+
+			loader.load("{{url_for('static',filename='STL/arm.STL')}}", function (geometry) {
+				geomet[2] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[2]=mesh;
+				mesh.position.set(0, 231.5, 0);
+				geometry.translate(0,101.1,0);
+				mesh.rotation.set(0, 0, 0);
+				mesh.scale.set(1, 1, 1);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+			loader.load("{{url_for('static',filename='STL/arm2.STL')}}", function (geometry) {
+				geomet[3] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[3]=mesh;
+				mesh.position.set(0, 452.6, 0);
+				geometry.translate(0,36.3,0);
+				mesh.rotation.set(0, 0, 0);
+				mesh.scale.set(1, 1, 1);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+			loader.load("{{url_for('static',filename='STL/wrist1.STL')}}", function (geometry) {
+				geomet[4] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[4]=mesh;
+				mesh.position.set(0, 452.6, 0);
+				geometry.translate(0,65,0);
+				mesh.rotation.set(0, 0, 0);
+				mesh.scale.set(1, 1, 1);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+			loader.load("{{url_for('static',filename='STL/wrist2.STL')}}", function (geometry) {
+				geomet[5] = geometry;
+				geometry.center();
+				var mesh = new THREE.Mesh(geometry, material);
+				parts[5]=mesh;
+				mesh.position.set(0, 675.6, 0);
+				geometry.translate(0,3,0);
+				mesh.rotation.set(0, 0, 0);
+				mesh.scale.set(1, 1, 1);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+				allReady.push(0);
+			});
+			// Lights
+
+			scene.add(new THREE.HemisphereLight(0x443333, 0x111122));
+
+			addShadowedLight(1, 1, 1, 0xffffff, 1.35);
+			addShadowedLight(0.5, 1, -1, 0xffaa00, 1);
+			// renderer
+
+			renderer = new THREE.WebGLRenderer({
+				antialias: true
+			});
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight-300);
+
+			renderer.gammaInput = true;
+			renderer.gammaOutput = true;
+
+			renderer.shadowMap.enabled = true;
+			var controls = new THREE.OrbitControls(camera, renderer.domElement);
+			container.appendChild(renderer.domElement);
+			
+
+
+			//
+
+			window.addEventListener('resize', onWindowResize, false);
+
+		}
+		var loader = new THREE.STLLoader();
+
+		function addShadowedLight(x, y, z, color, intensity) {
+
+			var directionalLight = new THREE.DirectionalLight(color, intensity);
+			directionalLight.position.set(x, y, z);
+			scene.add(directionalLight);
+
+			directionalLight.castShadow = true;
+
+			var d = 1;
+			directionalLight.shadow.camera.left = -d;
+			directionalLight.shadow.camera.right = d;
+			directionalLight.shadow.camera.top = d;
+			directionalLight.shadow.camera.bottom = -d;
+
+			directionalLight.shadow.camera.near = 1;
+			directionalLight.shadow.camera.far = 4;
+
+			directionalLight.shadow.mapSize.width = 1024;
+			directionalLight.shadow.mapSize.height = 1024;
+
+			directionalLight.shadow.bias = -0.002;
+
+		}
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / (window.innerHeight-300);
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(window.innerWidth , window.innerHeight -300);
+
+		}
+
+		function getRangeValue(){
+			m[0] = document.getElementById("m0").value*Math.PI/180;
+			m[1] = document.getElementById("m1").value*Math.PI/180;
+			m[2] = document.getElementById("m2").value*Math.PI/180;
+			m[3] = document.getElementById("m3").value*Math.PI/180;
+			m[4] = document.getElementById("m4").value*Math.PI/180;
+			m[5] = document.getElementById("m5").value*Math.PI/180;
+		}
+		
+		function setPosition(){
+			if(allReady.length==6){
+				l2=[Math.sin(m[0])*Math.sin(m[1])*r2,Math.cos(m[0])*r2,Math.sin(m[0])*Math.cos(m[1])*r2];
+				l3_=[Math.sin(m[0]+m[2])*Math.sin(m[1])*r3_,Math.cos(m[0]+m[2])*r3_,Math.sin(m[0]+m[2])*Math.cos(m[1])*r3_]
+				l3=[Math.sin(m[0]+m[2])*Math.sin(m[1])*r3,Math.cos(m[0]+m[2])*r3,Math.sin(m[0]+m[2])*Math.cos(m[1])*r3]
+				var axisX = new THREE.Vector3( Math.cos(m[3]), 0, Math.sin(-m[3]) ).normalize();
+				var axisY = new THREE.Vector3( 0, 1, 0 ).normalize();
+
+				let p0 = l0;
+				let p1 = addByElement(l0,l1);
+				let p2 = addByElement(p1,l2);
+				let p2_ = addByElement(p2,l3_);
+				let p3 = addByElement(p2,l3);
+				let p4 = addByElement(p3,l4);
+
+				parts[0].rotation.set(0,m[1],0,"YXZ");
+				parts[1].rotation.set(0,m[1],0,"YXZ");
+				parts[2].rotation.set(m[0],m[1],0,"YXZ");
+				parts[3].rotation.set(m[0]+m[2],m[1],0,"YXZ");
+				parts[4].rotation.set(m[0]+m[2],m[1],0,"YXZ");
+				parts[5].rotation.set(m[0]+m[2]+t1,m[1]+t2,t3,"YXZ");
+
+				parts[5].rotateOnAxis(axisX,m[4]);
+				parts[5].rotateOnAxis(axisY,m[3])
+
+				geomet[4].rotateY(m[3]-C_M3);
+				//geomet[5].rotateY(m[3]-C_M3)
+				
+				C_M3 = m[3];
+				C_M4 = m[4];
+
+				parts[3].position.set(p2[0],p2[1],p2[2]);
+				parts[4].position.set(p2_[0],p2_[1],p2_[2]);
+				parts[5].position.set(p3[0],p3[1],p3[2]);
+			}
+		}
+
+		function addByElement(a,b){
+			return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]
+		}
+
+		function animate() {
+			getRangeValue();
+
+			setPosition();
+
+			requestAnimationFrame(animate);
+
+			render();
+
+		}
+
+		function render() {
+
+
+			camera.lookAt(cameraTarget);
+
+			renderer.render(scene, camera);
+
+		}
+	</script>
+</body>
+
+</html>
