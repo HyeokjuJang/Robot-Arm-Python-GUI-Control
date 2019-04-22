@@ -68,16 +68,17 @@ def move_motor(motor):
     try:
         f = open("c_m_p.txt", 'r')
         for i in range(6):
-            c_m_p.append(int(f.readline()))
+            line =f.readline()
+            c_m_p.append(int(line))
             if not line: break
         f.close()
     except:
         c_m_p = [0,0,0,0,0,0]
     if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
-    min_speed = 0.05
+    min_speed = 0.03
     max_speed = 0.001
-    acc = 0.001
+    acc = 0.0002
     gap = (min_speed-max_speed)/acc
     duration = min_speed
     m=[]
@@ -87,8 +88,16 @@ def move_motor(motor):
     m.append(int(motor['m3'] - c_m_p[3])*10)
     m.append(int(motor['m4'] - c_m_p[4])*10)
     m.append(int(motor['m5'] - c_m_p[5])*10)
+    #방향 정하고
+    for i in range(len(m)):
+        if m[i] > 0:
+            gpio.output(DIR[i],CW)
+        else:
+            gpio.output(DIR[i],CCW)
+            m[i]=-m[i]
     # max step 찾고
     max_step = m[0]
+    
     for a in m:
         if max_step<a:
             max_step = a
@@ -103,14 +112,7 @@ def move_motor(motor):
     check_m = [0,0,0,0,0,0]
     current_step = 0
 
-    for i in range(len(m)):
-        if m_div_step[i] > 0:
-            gpio.output(DIR[i],CW)
-        else:
-            gpio.output(DIR[i],CCW)
-            m_div_step[i]=-m_div_step[i]
-    if max_step < 0:
-        max_step=-max_step
+    
 
     # for문 돌고
     for i in range(max_step):
