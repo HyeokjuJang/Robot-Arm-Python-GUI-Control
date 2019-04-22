@@ -176,7 +176,7 @@
 				shininess: 200
 			});
 			var loader = new THREE.STLLoader();
-			loader.load("{{url_for('static',filename='STL/base.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/base.stl')}}", function (geometry) {
 				geomet[0] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
@@ -190,7 +190,7 @@
 				allReady.push(0);
 			});
 
-			loader.load("{{url_for('static',filename='STL/sholder.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/sholder.stl')}}", function (geometry) {
 				geomet[1] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
@@ -207,7 +207,7 @@
 				allReady.push(0);
 			});
 
-			loader.load("{{url_for('static',filename='STL/arm.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/arm.stl')}}", function (geometry) {
 				geomet[2] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
@@ -223,7 +223,7 @@
 				scene.add(mesh);
 				allReady.push(0);
 			});
-			loader.load("{{url_for('static',filename='STL/arm2.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/arm2.stl')}}", function (geometry) {
 				geomet[3] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
@@ -239,7 +239,7 @@
 				scene.add(mesh);
 				allReady.push(0);
 			});
-			loader.load("{{url_for('static',filename='STL/wrist1.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/wrist1.stl')}}", function (geometry) {
 				geomet[4] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);
@@ -255,7 +255,7 @@
 				scene.add(mesh);
 				allReady.push(0);
 			});
-			loader.load("{{url_for('static',filename='STL/wrist2.STL')}}", function (geometry) {
+			loader.load("{{url_for('static',filename='STL/wrist2.stl')}}", function (geometry) {
 				geomet[5] = geometry;
 				geometry.center();
 				var mesh = new THREE.Mesh(geometry, material);

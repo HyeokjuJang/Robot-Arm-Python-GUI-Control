@@ -37,7 +37,7 @@ def load():
 
 @app.route("/save",methods=['POST'])
 def save():
-    m=json.loads(request.data)
+    m=json.loads(request.data.decode('utf-8'))
     try:
         filename = m['name']+'.json'
     except:
