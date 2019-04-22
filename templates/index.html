@@ -423,7 +423,11 @@
 
 			function moveRequest() {
 				httpRequest = new XMLHttpRequest();
-				parameters = JSON.stringify(sequences);
+				var temp = sequences;
+				for (var i = 0; i < Object.keys(temp).length; i++) {
+					temp[i] = temp[i]/Math.PI*180;
+				}
+				parameters = JSON.stringify(temp);
 				if (!httpRequest) {
 					alert('XMLHTTP 인스턴스를 만들 수가 없어요 ㅠㅠ');
 					return false;
