@@ -11,6 +11,15 @@ STEP = [13,27,5,4,12,24]
 CW =1
 CCW =0
 
+f = open("c_m_p.txt", 'w')
+f.write(str(0)+'\n')
+f.write(str(0)+'\n')
+f.write(str(0)+'\n')
+f.write(str(0)+'\n')
+f.write(str(0)+'\n')
+f.write(str(0)+'\n')
+f.close()
+
 #Flask Settings
 app = Flask(__name__)
 
