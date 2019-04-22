@@ -104,11 +104,13 @@ def move_motor(motor):
     current_step = 0
 
     for i in range(len(m)):
-        if m[i] > 0:
+        if m_div_step[i] > 0:
             gpio.output(DIR[i],CW)
         else:
             gpio.output(DIR[i],CCW)
-
+            m_div_step[i]=-m_div_step[i]
+    if max_step < 0:
+        max_step=-max_step
 
     # for문 돌고
     for i in range(max_step):
