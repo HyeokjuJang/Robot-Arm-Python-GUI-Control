@@ -69,25 +69,25 @@ def move_motor(motor):
         f = open("c_m_p.txt", 'r')
         for i in range(6):
             line =f.readline()
-            c_m_p.append(int(line))
+            c_m_p.append(float(line))
             if not line: break
         f.close()
     except:
         c_m_p = [0,0,0,0,0,0]
     if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
-    min_speed = 0.03
-    max_speed = 0.001
-    acc = 0.0002
+    min_speed = 0.005
+    max_speed = 0.0002
+    acc = 0.00001
     gap = (min_speed-max_speed)/acc
     duration = min_speed
     m=[]
-    m.append(int(motor['m0'] - c_m_p[0])*10)
-    m.append(int(motor['m1'] - c_m_p[1])*10)
-    m.append(int(motor['m2'] - c_m_p[2])*10)
-    m.append(int(motor['m3'] - c_m_p[3])*10)
-    m.append(int(motor['m4'] - c_m_p[4])*10)
-    m.append(int(motor['m5'] - c_m_p[5])*10)
+    m.append(int((motor['m0'] - c_m_p[0])*3700))
+    m.append(int((motor['m1'] - c_m_p[1])*700))
+    m.append(-int((motor['m2'] - c_m_p[2])*1200))#방향이 반대라서 - 붙임
+    m.append(int((motor['m3'] - c_m_p[3])*1200))
+    m.append(int((motor['m4'] - c_m_p[4])*3000))
+    m.append(int((motor['m5'] - c_m_p[5])*200))
     #방향 정하고
     for i in range(len(m)):
         if m[i] > 0:
