@@ -69,8 +69,11 @@ def move_motor(motor):
         f = open("c_m_p.txt", 'r')
         for i in range(6):
             c_m_p.append(int(f.readline()))
+            if not line: break
         f.close()
     except:
+        c_m_p = [0,0,0,0,0,0]
+    if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
     min_speed = 0.05
     max_speed = 0.001
