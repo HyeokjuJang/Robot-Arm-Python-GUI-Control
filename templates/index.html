@@ -85,6 +85,14 @@
 		<button id="deleteBlock">Delete!</button>
 		<button id="saveButton">Save!</button>
 	</div>
+	<div>
+		<input type="button" onclick="xyz_move_up" id="up" value="up">
+		<input type="button" onclick="xyz_move_down" id="down" value="down">
+		<input type="button" onclick="xyz_move_left" id="left" value="left">
+		<input type="button" onclick="xyz_move_right" id="right" value="right">
+		<input type="button" onclick="xyz_move_forward" id="forward" value="forward">
+		<input type="button" onclick="xyz_move_backward" id="backward" value="backward">
+	</div>
 	<div><button id="moveButton">GO!</button></div>
 
 	<script src="{{ url_for('static', filename='js/three.js') }}"></script>
@@ -404,6 +412,71 @@
 
 			renderer.render(scene, camera);
 
+		}
+		
+		//xyz 버튼 조작
+		//해 값들을 미리 찾음
+		var m0_arr = new Array(260);
+		var m2_arr = new Array(260);
+		for(var i=0;i<m0_arr.length;i++){
+			m0_arr[i]=i+1;
+			m2_arr[i]=i+1;
+		}
+		let xyz_array = []
+		let m0_m2 = []
+		m0_arr.forEach(function(m0_v){
+			m2_arr.forEach(function(m2_v){
+				xyz_array.appendChild([r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r2*Math.cos(m0_v*Math.PI/180)+r3*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)]);
+				m0_m2.appendChild([m0_v,m2_v])
+			});
+		});
+
+		//find nearest로 m0 m2값을 찾는다.
+		function find_nearest(xyz_array,x,y){
+			var distance=[]
+			for(var i=0;i<xyz_array.length;i++){
+				distance.appendChild=(xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y) ;
+			}
+			return distance.indexOf(Math.min(distance));
+		}
+		function calc_xy(){
+			m0_v=document.getElementById("m0").value;
+			m2_v=document.getElementById("m2").value;
+			return r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r4*Math.cos(m0_v*Math.PI/180)+r2*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)
+		}
+		function xyz_move_up(){
+			c_x,c_y=calc_xy();
+			m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x,c_y+3)]
+			document.getElementById("m0").value = m0_v;
+			document.getElementById("m2").value = m2_v;
+			document.getElementById("m4").value = -m0_v-m2_v;
+		}
+		function xyz_move_down(){
+			c_x,c_y=calc_xy();
+			m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x,c_y-3)]
+			document.getElementById("m0").value = m0_v;
+			document.getElementById("m2").value = m2_v;
+			document.getElementById("m4").value = -m0_v-m2_v;
+		}
+		function xyz_move_left(){
+			c_x,c_y=calc_xy();
+			m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x-3,c_y)]
+			document.getElementById("m0").value = m0_v;
+			document.getElementById("m2").value = m2_v;
+			document.getElementById("m4").value = -m0_v-m2_v;
+		}
+		function xyz_move_right(){
+			c_x,c_y=calc_xy();
+			m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x+3,c_y)]
+			document.getElementById("m0").value = m0_v;
+			document.getElementById("m2").value = m2_v;
+			document.getElementById("m4").value = -m0_v-m2_v;
+		}
+		function xyz_move_forward(){
+			document.getElementById("m1").value += 3;
+		}
+		function xyz_move_backward(){
+			document.getElementById("m1").value -= 3;
 		}
 	</script>
 	<script>
