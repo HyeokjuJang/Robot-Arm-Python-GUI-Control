@@ -28,7 +28,7 @@ gpio.setup(DIR, gpio.OUT)
 gpio.setup(STEP, gpio.OUT)
 
 def move_step(motor,step):
-    duration = 0.01
+    duration = 0.001
     n = int(motor)
     gpio.output(DIR[n],CW)
     for i in range(step):
@@ -54,7 +54,7 @@ def move():
             chk = 0
             break
         else:
-            step = order.split(' ')[1]
+            step = int(order.split(' ')[1])
             steps[int(motor)] = int(step)
             move_step(motor,step)
         
