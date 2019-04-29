@@ -15,9 +15,9 @@ flask를 이용해서 웹서버를 구축하고 로컬에서 접속해서 모터
 |4번|12|25|
 |5번|24|23|
 
-| Fun                  | With                 | Tables          |
+| 모터                  | 스텝                 | 방향          |
 | :------------------- | -------------------: |:---------------:|
-| left-aligned column  | right-aligned column | centered column |
-| $100                 | $100                 | $100            |
-| $10                  | $10                  | $10             |
-| $1                   | $1                   | $1              |
+| 0번  | right-aligned column | centered column |
+| 1번                 | $100                 | $100            |
+| 2번                  | $10                  | $10             |
+| 3                   | $1                   | $1              |
