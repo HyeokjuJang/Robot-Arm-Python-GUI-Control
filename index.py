@@ -87,7 +87,7 @@ def move_motor(motor):
         c_m_p = [0,0,0,0,0,0]
     min_speed = 0.005
     max_speed = 0.0002
-    acc = 0.00001
+    acc = 0.00005
     gap = (min_speed-max_speed)/acc
     duration = min_speed
     m=[]
