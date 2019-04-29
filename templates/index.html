@@ -86,12 +86,12 @@
 		<button id="saveButton">Save!</button>
 	</div>
 	<div>
-		<input type="button" onclick="xyz_move_up" id="up" value="up">
-		<input type="button" onclick="xyz_move_down" id="down" value="down">
-		<input type="button" onclick="xyz_move_left" id="left" value="left">
-		<input type="button" onclick="xyz_move_right" id="right" value="right">
-		<input type="button" onclick="xyz_move_forward" id="forward" value="forward">
-		<input type="button" onclick="xyz_move_backward" id="backward" value="backward">
+		<input type="button" onclick="xyz_move_up();" id="up" value="up">
+		<input type="button" onclick="xyz_move_down();" id="down" value="down">
+		<input type="button" onclick="xyz_move_left();" id="left" value="left">
+		<input type="button" onclick="xyz_move_right();" id="right" value="right">
+		<input type="button" onclick="xyz_move_forward();" id="forward" value="forward">
+		<input type="button" onclick="xyz_move_backward();" id="backward" value="backward">
 	</div>
 	<div><button id="moveButton">GO!</button></div>
 
@@ -435,7 +435,7 @@
 		function find_nearest(xyz_array,x,y){
 			var distance=[]
 			for(var i=0;i<xyz_array.length;i++){
-				distance.push=(xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y) ;
+				distance.push((xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y));
 			}
 			return distance.indexOf(Math.min(distance));
 		}
