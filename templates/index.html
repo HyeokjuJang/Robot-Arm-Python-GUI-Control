@@ -442,41 +442,41 @@
 		function calc_xy(){
 			m0_v=document.getElementById("m0").value;
 			m2_v=document.getElementById("m2").value;
-			return r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r4*Math.cos(m0_v*Math.PI/180)+r2*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)
+			return [r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r2*Math.cos(m0_v*Math.PI/180)+r3*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)];
 		}
 		function xyz_move_up(){
-			var c_x,c_y=calc_xy();
-			var m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x,c_y+3)]
+			var [c_x,c_y]=calc_xy();
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y+3)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			document.getElementById("m4").value = -m0_v-m2_v;
 		}
 		function xyz_move_down(){
-			var c_x,c_y=calc_xy();
-			var m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x,c_y-3)]
+			var [c_x,c_y]=calc_xy();
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y-3)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			document.getElementById("m4").value = -m0_v-m2_v;
 		}
 		function xyz_move_left(){
-			var c_x,c_y=calc_xy();
-			var m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x-3,c_y)]
+			var [c_x,c_y]=calc_xy();
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x-3,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			document.getElementById("m4").value = -m0_v-m2_v;
 		}
 		function xyz_move_right(){
-			var c_x,c_y=calc_xy();
-			var m0_v, m2_v = m0_m2[find_nearest(xyz_array,c_x+3,c_y)]
+			var [c_x,c_y]=calc_xy();
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x+3,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			document.getElementById("m4").value = -m0_v-m2_v;
 		}
 		function xyz_move_forward(){
-			document.getElementById("m1").value += 3;
+			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) + 3;
 		}
 		function xyz_move_backward(){
-			document.getElementById("m1").value -= 3;
+			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) - 3;
 		}
 	</script>
 	<script>
