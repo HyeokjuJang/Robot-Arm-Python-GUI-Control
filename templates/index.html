@@ -426,8 +426,8 @@
 		let m0_m2 = []
 		m0_arr.forEach(function(m0_v){
 			m2_arr.forEach(function(m2_v){
-				xyz_array.appendChild([r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r2*Math.cos(m0_v*Math.PI/180)+r3*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)]);
-				m0_m2.appendChild([m0_v,m2_v])
+				xyz_array.push([r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r2*Math.cos(m0_v*Math.PI/180)+r3*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)]);
+				m0_m2.push([m0_v,m2_v])
 			});
 		});
 
@@ -435,7 +435,7 @@
 		function find_nearest(xyz_array,x,y){
 			var distance=[]
 			for(var i=0;i<xyz_array.length;i++){
-				distance.appendChild=(xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y) ;
+				distance.push=(xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y) ;
 			}
 			return distance.indexOf(Math.min(distance));
 		}
