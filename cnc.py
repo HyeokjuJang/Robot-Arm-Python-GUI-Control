@@ -7,7 +7,7 @@ import json
 from time import sleep
 import RPi.GPIO as gpio
 import math
-import pyserial
+import serial
 
 # 초기 아두이노 시리얼 셋팅
 ser = serial.Serial("/dev/ttyACM0",9600)
