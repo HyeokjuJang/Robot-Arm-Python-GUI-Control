@@ -5,7 +5,7 @@
 언제든지 마음대로 바꿔서 쓰실 수 있습니다.  
 flask를 이용해서 웹서버를 구축하고 로컬에서 접속해서 모터를 컨트롤 하는 구조입니다.  
 
-시연 영상
+시연 영상  
 [![시연영상](http://img.youtube.com/vi/qU8u063SvTo/0.jpg)](https://youtu.be/qU8u063SvTo)
 
 
