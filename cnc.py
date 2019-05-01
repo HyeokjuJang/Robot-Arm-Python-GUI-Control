@@ -158,6 +158,7 @@ def move_cnc(x,y):
     while True:
         if ser.readline() == b'done\n':
             break
+        sleep(0.1)
     return 0
 
 # 메인 뤂
