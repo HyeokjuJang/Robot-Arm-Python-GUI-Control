@@ -161,7 +161,7 @@ def move_cnc(x,y):
     strings = "G "+str(x)+" "+str(y)+"\n"
     ser.write(str.encode(strings))
     while True:
-        if ser.readlines() == "done":
+        if str.encode(ser.readline()) == "done":
             break
     return 0
 
