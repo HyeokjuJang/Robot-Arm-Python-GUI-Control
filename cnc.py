@@ -11,7 +11,9 @@ import serial
 
 # 초기 아두이노 시리얼 셋팅
 ser = serial.Serial("/dev/ttyACM0",9600)
-
+sleep(5)
+ser.flushInput()
+ser.flushOutput()
 # 로봇팔 초기 셋팅
 #GPIO Settings
 DIR = [26,22,6,17,25,23]
@@ -49,7 +51,7 @@ def move_robotarm(file_name):
         while motor_busy:
             sleep(0.1)
         motor_busy = 1
-    return "done!"
+    return 0
 
 def read_json(m):
     # 파일에서 json을 읽어오기
@@ -57,7 +59,6 @@ def read_json(m):
         filename = m + '.json'
         with open(filename) as json_file:  
             json_data = json.load(json_file)
-        json_data = json.dumps(json_data)
     except:
         return "noData"
     return json_data
@@ -168,9 +169,9 @@ while True:
     wait_cnc = move_cnc(1000,1000)
     while wait_cnc:
         sleep(0.1)
-    
+    sleep(1)
     # 로봇팔 움직임
     wait_robot = 1
-    wait_robot = move_robotarm("test00")
+    wait_robot = move_robotarm("test2")
     while wait_robot:
         sleep(0.1)

@@ -3,6 +3,9 @@ import json
 from time import sleep
 import RPi.GPIO as gpio
 import math
+import socket
+import qrcode
+from PIL import Image
 
 #GPIO Settings
 DIR = [26,22,6,17,25,23]
@@ -169,7 +172,14 @@ def move_motor(motor):
     gpio.cleanup()
     return 0
 
+# for qr viewer
+def qr_gen():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    img = qrcode.make('http://'+s.getsockname()[0]+'/')
+    img.show()
 
+qr_gen()
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0',port=80,debug = True)
