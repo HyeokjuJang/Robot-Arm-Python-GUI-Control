@@ -5,7 +5,6 @@ import RPi.GPIO as gpio
 import math
 import socket
 import qrcode
-from PIL import Image
 
 #GPIO Settings
 DIR = [26,22,6,17,25,23]
