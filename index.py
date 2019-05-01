@@ -106,7 +106,7 @@ def move_motor(motor):
     m.append(int((motor['m1'] - c_m_p[1])*2/math.pi*motor_steps[1]))
     m.append(-int((motor['m2'] - c_m_p[2])*2/math.pi*motor_steps[2]))#방향이 반대라서 - 붙임
     m.append(int((motor['m3'] - c_m_p[3])*2/math.pi*motor_steps[3]))
-    m.append(int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))
+    m.append(-int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))#방향이 반대라서 - 붙임
     m.append(int((motor['m5'] - c_m_p[5])*2/math.pi*motor_steps[5]))
     #방향 정하고
     for i in range(len(m)):
