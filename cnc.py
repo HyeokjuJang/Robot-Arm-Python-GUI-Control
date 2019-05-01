@@ -1,15 +1,26 @@
-from flask import Flask,render_template,request
+# 아두이노랑 통신을 해서 cnc를 움직이고 로봇팔은 거기에 매달려서 움직인다.
+# 여기서 이루어지는 것은 아두이노에 움직이는 Gcode를 날리고 완료되면 로봇팔의 동작을 수행하고 이것을 반복한다.
+# 정해진 코드가 있어야하고 랜덤을 넣을 예정이다.
+# Gcode의 좌표는 절대좌표로 날라간다.
+# 해당 Gcode에서 로봇팔이 벽에 부딫치는 것을 예방해야함을 항상 명심
 import json
 from time import sleep
 import RPi.GPIO as gpio
 import math
+import pyserial
 
+# 초기 아두이노 시리얼 셋팅
+ser = serial.Serial("/dev/ttyACM0",9600)
+
+# 로봇팔 초기 셋팅
 #GPIO Settings
 DIR = [26,22,6,17,25,23]
 STEP = [13,27,5,4,12,24]
 CW =1
 CCW =0
-
+gpio.setmode(gpio.BCM)
+gpio.setup(DIR, gpio.OUT)
+gpio.setup(STEP, gpio.OUT)
 f = open("c_m_p.txt", 'w')
 f.write(str(0)+'\n')
 f.write(str(0)+'\n')
@@ -18,7 +29,6 @@ f.write(str(0)+'\n')
 f.write(str(0)+'\n')
 f.write(str(0)+'\n')
 f.close()
-
 # step setup 90도당 몇스텝이냐.
 motor_steps = []
 try:
@@ -30,60 +40,31 @@ try:
     f.close()
 except:
     motor_steps = [100,100,100,100,100,100]
+motor_busy = 1
+cnc_busy = 1
 
-#Flask Settings
-app = Flask(__name__)
-
-motor_busy = 0
-
-@app.route("/")
-def hello():
-    return render_template('index.html')
-    
-@app.route("/move",methods=['POST'])
-def move():
-    m=json.loads(request.data.decode('utf-8'))
+# JSON불러와서 로봇팔 움직이는 함수
+def move_robotarm(file_name):
+    m = read_json(file_name)
     for motor_s in m:
         motor_busy = move_motor(motor_s)
         while motor_busy:
             sleep(0.1)
         motor_busy = 1
-
     return "done!"
 
-@app.route("/load",methods=['POST'])
-def load():
+def read_json(m):
     # 파일에서 json을 읽어오기
     try:
-        m=request.data.decode('utf-8')
         filename = m + '.json'
         with open(filename) as json_file:  
-            m = json.load(json_file)
-        m = json.dumps(m)
+            json_data = json.load(json_file)
+        json_data = json.dumps(json_data)
     except:
         return "noData"
-    return m
-
-@app.route("/save",methods=['POST'])
-def save():
-    m=json.loads(request.data.decode('utf-8'))
-    try:
-        filename = m['name']+'.json'
-    except:
-        return '이름이 없어요.'
-    del m['name']
-    csvData = m['motor']
-
-    with open(filename, 'w') as outfile:
-        json.dump(csvData, outfile)
-
-    outfile.close()
-    return filename + '으로 저장되었습니다.'
+    return json_data
 
 def move_motor(motor):
-    gpio.setmode(gpio.BCM)
-    gpio.setup(DIR, gpio.OUT)
-    gpio.setup(STEP, gpio.OUT)
     c_m_p=[]
     try:
         f = open("c_m_p.txt", 'r')
@@ -169,7 +150,31 @@ def move_motor(motor):
     gpio.cleanup()
     return 0
 
+# 아두이노에 Gcode 날려주는 함수
+def gogo_cnc(x,y):
+    cnc_busy = move_cnc(x,y)
+    while cnc_busy:
+        sleep(0.1)
+    cnc_busy = 1
 
+def move_cnc(x,y):
+    strings = "G "+str(x)+" "+str(y)+"\n"
+    ser.write(str.encode(strings))
+    while True:
+        if ser.readlines() == "done":
+            break
+    return 0
 
-if __name__ == '__main__':
-   app.run(host='0.0.0.0',port=80,debug = True)
+# 메인 뤂
+while True:
+    # cnc 움직임
+    wait_cnc = 1
+    wait_cnc = move_cnc(1000,1000)
+    while wait_cnc:
+        sleep(0.1)
+    
+    # 로봇팔 움직임
+    wait_robot = 1
+    wait_robot = move_robotarm("test00")
+    while wait_robot:
+        sleep(0.1)

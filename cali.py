@@ -1,5 +1,4 @@
 import json
-import csv
 from time import sleep
 import RPi.GPIO as gpio
 import math
