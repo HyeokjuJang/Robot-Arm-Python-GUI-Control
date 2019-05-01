@@ -18,9 +18,7 @@ DIR = [26,22,6,17,25,23]
 STEP = [13,27,5,4,12,24]
 CW =1
 CCW =0
-gpio.setmode(gpio.BCM)
-gpio.setup(DIR, gpio.OUT)
-gpio.setup(STEP, gpio.OUT)
+
 f = open("c_m_p.txt", 'w')
 f.write(str(0)+'\n')
 f.write(str(0)+'\n')
@@ -66,6 +64,9 @@ def read_json(m):
 
 def move_motor(motor):
     c_m_p=[]
+    gpio.setmode(gpio.BCM)
+    gpio.setup(DIR, gpio.OUT)
+    gpio.setup(STEP, gpio.OUT)
     try:
         f = open("c_m_p.txt", 'r')
         for i in range(6):
@@ -151,17 +152,11 @@ def move_motor(motor):
     return 0
 
 # 아두이노에 Gcode 날려주는 함수
-def gogo_cnc(x,y):
-    cnc_busy = move_cnc(x,y)
-    while cnc_busy:
-        sleep(0.1)
-    cnc_busy = 1
-
 def move_cnc(x,y):
     strings = "G "+str(x)+" "+str(y)+"\n"
     ser.write(str.encode(strings))
     while True:
-        if ser.readline() == b'"done\n":
+        if ser.readline() == b'done\n':
             break
     return 0
 
