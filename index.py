@@ -178,7 +178,6 @@ def qr_gen():
     img = qrcode.make('http://'+s.getsockname()[0]+'/')
     img.show()
 
-qr_gen()
-
 if __name__ == '__main__':
-   app.run(host='0.0.0.0',port=80,debug = True)
+    qr_gen()
+    app.run(host='0.0.0.0',port=80,debug = True)
