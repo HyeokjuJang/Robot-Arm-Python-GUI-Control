@@ -21,6 +21,8 @@ flask를 이용해서 웹서버를 구축하고 로컬에서 접속해서 모터
 | 4번                   | 12                   | 25              |
 | 5번                   | 24                   | 23              |
 
+![핀맵 이미지](https://github.com/HyeokjuJang/Robot-Arm-Python-GUI-Control/raw/master/robotarm_bb.jpg)
+
 ## 실행해봅시다.
 
 cali.py로 우선 모터 스텝 셋팅을 합니다.  
