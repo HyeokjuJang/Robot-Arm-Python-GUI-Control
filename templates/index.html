@@ -420,8 +420,8 @@
 		var m0_arr = new Array(350);
 		var m2_arr = new Array(350);
 		for(var i=0;i<m0_arr.length;i++){
-			m0_arr[i]=i/m0_arr.length*180-90;
-			m2_arr[i]=i/m0_arr.length*180-90;
+			m0_arr[i]=i/m0_arr.length*120;
+			m2_arr[i]=i/m0_arr.length*120;
 		}
 		let xyz_array = []
 		let m0_m2 = []
@@ -474,10 +474,10 @@
 			document.getElementById("m4").value = -m0_v-m2_v;
 		}
 		function xyz_move_forward(){
-			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) + 3;
+			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) + 1;
 		}
 		function xyz_move_backward(){
-			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) - 3;
+			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) - 1;
 		}
 		function xyz_move_random(moved){
 			if(moved==0){
