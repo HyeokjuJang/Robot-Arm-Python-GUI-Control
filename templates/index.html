@@ -417,11 +417,11 @@
 		
 		//xyz 버튼 조작
 		//해 값들을 미리 찾음
-		var m0_arr = new Array(260);
-		var m2_arr = new Array(260);
+		var m0_arr = new Array(1000);
+		var m2_arr = new Array(1000);
 		for(var i=0;i<m0_arr.length;i++){
-			m0_arr[i]=i+1;
-			m2_arr[i]=i+1;
+			m0_arr[i]=i/m0_arr.length*180;
+			m2_arr[i]=i/m0_arr.length*180;
 		}
 		let xyz_array = []
 		let m0_m2 = []
