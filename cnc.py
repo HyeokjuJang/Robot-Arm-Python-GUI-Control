@@ -172,6 +172,19 @@ while True:
     sleep(1)
     # 로봇팔 움직임
     wait_robot = 1
-    wait_robot = move_robotarm("test2")
+    wait_robot = move_robotarm("jola1")
     while wait_robot:
         sleep(0.1)
+    sleep(1)
+    # cnc 움직임
+    wait_cnc = 1
+    wait_cnc = move_cnc(0,0)
+    while wait_cnc:
+        sleep(0.1)
+    sleep(1)
+    # 로봇팔 움직임
+    wait_robot = 1
+    wait_robot = move_robotarm("jola2")
+    while wait_robot:
+        sleep(0.1)
+    sleep(1)
