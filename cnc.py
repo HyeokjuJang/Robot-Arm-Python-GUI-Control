@@ -166,7 +166,7 @@ def move_cnc(x,y):
 while True:
     # cnc 움직임
     wait_cnc = 1
-    wait_cnc = move_cnc(1000,1000)
+    wait_cnc = move_cnc(3000,3000)
     while wait_cnc:
         sleep(0.1)
     sleep(1)
