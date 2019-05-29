@@ -58,6 +58,7 @@
 			display:inline-block;
 			background-color: aquamarine;
 			width:30px;
+			text-align: center;
 		}
 
 	</style>
@@ -159,7 +160,7 @@
 			cameraTarget = new THREE.Vector3(0, 400, 0);
 
 			scene = new THREE.Scene();
-			scene.background = new THREE.Color(0x72645b);
+			scene.background = new THREE.Color(0xffffff);
 
 
 			// Ground
@@ -168,7 +169,7 @@
 				new THREE.PlaneBufferGeometry(40000, 40000),
 				new THREE.MeshPhongMaterial({
 					color: 0x999999,
-					specular: 0x101010
+					specular: 0xffffff
 				})
 			);
 			plane.rotation.x = -Math.PI / 2;
@@ -282,13 +283,13 @@
 			});
 			// Lights
 
-			scene.add(new THREE.HemisphereLight(0x443333, 0x111122));
+			scene.add(new THREE.HemisphereLight(0x336bc0, 0x336bc0));
 
 			addShadowedLight(1, 1, 1, 0xffffff, 1.35);
 			addShadowedLight(0.5, 1, -1, 0xffaa00, 1);
 			// renderer
 
-			renderer = new THREE.WebGLRenderer({
+			renderer = new THREE.WebGLRenderer({ 
 				antialias: true
 			});
 			renderer.setPixelRatio(window.devicePixelRatio);
