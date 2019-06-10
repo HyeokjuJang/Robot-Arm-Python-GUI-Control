@@ -446,33 +446,65 @@
 			m2_v=document.getElementById("m2").value;
 			return [r2*Math.sin(m0_v*Math.PI/180)+r3*Math.sin(m0_v*Math.PI/180+m2_v*Math.PI/180),r2*Math.cos(m0_v*Math.PI/180)+r3*Math.cos(m0_v*Math.PI/180+m2_v*Math.PI/180)];
 		}
-		function xyz_move_up(){
+		function xyz_move_up(draw=0){
 			var [c_x,c_y]=calc_xy();
 			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y+3)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
-			document.getElementById("m4").value = -m0_v-m2_v;
+			if(draw == 0){
+				document.getElementById("m4").value = -m0_v-m2_v;
+			}else{
+				if(m2_v > 0){
+					document.getElementById("m4").value = -m0_v-m2_v -Math.PI/2;
+				}else{
+					document.getElementById("m4").value = -m0_v-m2_v +Math.PI/2;
+				}
+			}
 		}
-		function xyz_move_down(){
+		function xyz_move_down(draw=0){
 			var [c_x,c_y]=calc_xy();
 			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y-3)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
-			document.getElementById("m4").value = -m0_v-m2_v;
+			if(draw == 0){
+				document.getElementById("m4").value = -m0_v-m2_v;
+			}else{
+				if(m2_v > 0){
+					document.getElementById("m4").value = -m0_v-m2_v -Math.PI/2;
+				}else{
+					document.getElementById("m4").value = -m0_v-m2_v +Math.PI/2;
+				}
+			}
 		}
-		function xyz_move_left(){
+		function xyz_move_left(draw=0){
 			var [c_x,c_y]=calc_xy();
 			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x-3,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
-			document.getElementById("m4").value = -m0_v-m2_v;
+			if(draw == 0){
+				document.getElementById("m4").value = -m0_v-m2_v;
+			}else{
+				if(m2_v > 0){
+					document.getElementById("m4").value = -m0_v-m2_v -Math.PI/2;
+				}else{
+					document.getElementById("m4").value = -m0_v-m2_v +Math.PI/2;
+				}
+			}
 		}
-		function xyz_move_right(){
+		function xyz_move_right(draw=0){
 			var [c_x,c_y]=calc_xy();
 			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x+3,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
-			document.getElementById("m4").value = -m0_v-m2_v;
+			if(draw == 0){
+				document.getElementById("m4").value = -m0_v-m2_v;
+			}else{
+				if(m2_v > 0){
+					document.getElementById("m4").value = -m0_v-m2_v -Math.PI/2;
+				}else{
+					document.getElementById("m4").value = -m0_v-m2_v +Math.PI/2;
+				}
+			}
 		}
 		function xyz_move_forward(){
 			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) + 1;
@@ -566,85 +598,85 @@
 			function makeZolaMan(){
 				// 먼저 그림을 그릴 베이스 포인트로 로봇팔을 가져감 붓은 그릴 곳으로부터 4틱 떨어져있음.
 				for(var i=0;i<4;i++) // 머리 점찍고
-					xyz_move_up()
+					xyz_move_up(1)
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 다시 내리고
-					xyz_move_down()
+					xyz_move_down(1)
 				createBlock('currentData')
 				for(var i=0;i<2;i++) // 몸통쪽으로 내려와서
-					xyz_move_left()
+					xyz_move_left(1)
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 점 찍고
-					xyz_move_up()
+					xyz_move_up(1)
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 왼쪽 팔 그리고
 					xyz_move_forward()
 				var rand = xyz_move_random(0) // 랜덤 무브
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 붓 내리기
-					xyz_move_down()
+					xyz_move_down(1)
 				xyz_move_random(rand) // 랜덤도 돌아오기
 				createBlock('currentData')
 				for(var i=0;i<4;i++)  // 다시 몸통으로 컴백
 					xyz_move_backward()
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 몸통 점 찍고
-					xyz_move_up()
+					xyz_move_up(1)
 				createBlock('currentData')
 				for(var i=0;i<4;i++)  // 오른쪽 팔 그리기
 					xyz_move_backward()
 				rand = xyz_move_random(0) // 랜덤 무브
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 붓 내리기
-					xyz_move_down()
+					xyz_move_down(1)
 				xyz_move_random(rand) // 랜덤도 돌아오기
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 몸통으로 돌아와서
 					xyz_move_forward()
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 몸통 점 찍고
-					xyz_move_up()
+					xyz_move_up(1)
 				createBlock('currentData')
 				for(var i=0;i<2;i++) // 왼쪽다리 무릎그리기
-					xyz_move_left()
+					xyz_move_left(1)
 				xyz_move_forward()
 				rand = xyz_move_random(0)
 				createBlock('currentData')
 				for(var i=0;i<2;i++) // 왼쪽다리 발그리기
-					xyz_move_left()
+					xyz_move_left(1)
 				xyz_move_forward()
 				var rand1 = xyz_move_random(0)
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 붓 내리기
-					xyz_move_down()
+					xyz_move_down(1)
 				createBlock('currentData')
 				xyz_move_random(rand) // 랜덤 돌리고
 				xyz_move_random(rand1)
 				for(var i=0;i<4;i++) // 몸통으로 돌아오기
-					xyz_move_right()
+					xyz_move_right(1)
 				for(var i=0;i<2;i++)
 					xyz_move_backward()
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 몸통 점 찍고
-					xyz_move_up()
+					xyz_move_up(1)
 				createBlock('currentData')
 				for(var i=0;i<2;i++) // 오른쪽다리 무릎그리기
-					xyz_move_left()
+					xyz_move_left(1)
 				xyz_move_backward()
 				rand = xyz_move_random(0)
 				createBlock('currentData')
 				for(var i=0;i<2;i++) // 오른쪽다리 발그리기
-					xyz_move_left()
+					xyz_move_left(1)
 				xyz_move_backward()
 				var rand1 = xyz_move_random(0)
 				createBlock('currentData')
 				for(var i=0;i<4;i++) // 붓 내리기
-					xyz_move_down()
+					xyz_move_down(1)
 				createBlock('currentData')
 				xyz_move_random(rand) // 랜덤 돌리고
 				xyz_move_random(rand1)
 				for(var i=0;i<4;i++) // 몸통으로 돌아오기
-					xyz_move_right()
+					xyz_move_right(1)
 				for(var i=0;i<2;i++)
 					xyz_move_forward()
 				createBlock('currentData')
