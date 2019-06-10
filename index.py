@@ -155,10 +155,10 @@ def move_motor(motor):
         # 스피드는 맥스까지 올렸다가
         # max랑 min 사이에 change 차이만큼 남았을 때
         # duration 낮춤
-        if max_step - current_step < gap:
-            duration+=acc
-        elif current_step < gap:
+        if current_step < gap:
             duration-=acc
+        elif max_step - current_step < gap:
+            duration+=acc
 
         current_step += 1
     # DEBUG:
