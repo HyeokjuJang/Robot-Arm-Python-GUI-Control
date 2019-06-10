@@ -41,7 +41,7 @@ motor_busy = 0
 @app.route("/")
 def hello():
     return render_template('index.html')
-    
+
 @app.route("/move",methods=['POST'])
 def move():
     m=json.loads(request.data.decode('utf-8'))
@@ -59,7 +59,7 @@ def load():
     try:
         m=request.data.decode('utf-8')
         filename = m + '.json'
-        with open(filename) as json_file:  
+        with open(filename) as json_file:
             m = json.load(json_file)
         m = json.dumps(m)
     except:
@@ -98,9 +98,9 @@ def move_motor(motor):
         c_m_p = [0,0,0,0,0,0]
     if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
-    min_speed = 0.001
+    min_speed = 0.01
     max_speed = 0.0002
-    acc = 0.00005
+    acc = 0.000003
     gap = (min_speed-max_speed)/acc
     duration = min_speed
     m=[]
@@ -119,7 +119,7 @@ def move_motor(motor):
             m[i]=-m[i]
     # max step 찾고
     max_step = m[0]
-    
+
     for a in m:
         if max_step<a:
             max_step = a
@@ -134,7 +134,7 @@ def move_motor(motor):
     check_m = [0,0,0,0,0,0]
     current_step = 0
 
-    
+
 
     # for문 돌고
     for i in range(max_step):
