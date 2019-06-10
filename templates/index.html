@@ -524,11 +524,11 @@
 					move+=10
 				}
 				if(Math.random()>0.5){
-					xyz_move_left()
+					xyz_move_left(1)
 					move+=100
 				}
 				if(Math.random()>0.5){
-					xyz_move_right()
+					xyz_move_right(1)
 					move+=1000
 				}
 				return move
@@ -536,11 +536,11 @@
 			else{
 				if(moved-1000>=0){
 					moved-=1000
-					xyz_move_right()
+					xyz_move_right(1)
 				}
 				if(moved-100>=0){
 					moved-=100
-					xyz_move_left()
+					xyz_move_left(1)
 				}
 				if(moved-10>=0){
 					moved-=10
