@@ -146,10 +146,10 @@ def move_motor(motor):
         # 돌면서 나눈 스텝 끝난애들 멈추고
         for i in range(len(m)):
             gpio.output(STEP[i],gpio.LOW)
-            if check_m[i] == m_div_step[i]:
+            check_m[i]+=1
+            if check_m[i] >= m_div_step[i]:
                 check_m[i]=0
-            else:
-                check_m[i]+=1
+
         # 스피드는 맥스까지 올렸다가
         # max랑 min 사이에 change 차이만큼 남았을 때
         # duration 낮춤
