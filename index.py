@@ -110,6 +110,8 @@ def move_motor(motor):
     m.append(int((motor['m3'] - c_m_p[3])*2/math.pi*motor_steps[3]))
     m.append(-int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))#방향이 반대라서 - 붙임
     m.append(int((motor['m5'] - c_m_p[5])*2/math.pi*motor_steps[5]))
+    # DEBUG:
+    print(m)
     #방향 정하고
     for i in range(len(m)):
         if m[i] > 0:
@@ -159,7 +161,8 @@ def move_motor(motor):
             duration-=acc
 
         current_step += 1
-
+    # DEBUG:
+    print(m)
     f = open("c_m_p.txt", 'w')
     f.write(str(motor['m0'])+'\n')
     f.write(str(motor['m1'])+'\n')
