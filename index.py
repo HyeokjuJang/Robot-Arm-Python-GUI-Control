@@ -99,7 +99,7 @@ def move_motor(motor):
     if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
     min_speed = 0.001
-    max_speed = 0.0002
+    max_speed = 0.0003
     acc = 0.000003
     gap = (min_speed-max_speed)/acc
     duration = min_speed
