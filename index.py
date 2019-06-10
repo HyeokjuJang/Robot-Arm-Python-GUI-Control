@@ -169,6 +169,7 @@ def move_motor(motor):
     f.write(str(motor['m5'])+'\n')
     f.close()
     gpio.cleanup()
+    sleep(0.4)
     return 0
 
 # for qr viewer
