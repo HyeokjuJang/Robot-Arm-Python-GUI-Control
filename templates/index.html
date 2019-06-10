@@ -8,7 +8,7 @@
 	<style>
 		body {
 			font-family: Monospace;
-			background-color: #000000;
+			background-color: #ffffff;
 			margin: 0px;
 			overflow: hidden;
 		}
@@ -121,7 +121,7 @@
 		var geomet = [];
 		var allReady = [];
 
-		let C_M4 = 0; //current m4 
+		let C_M4 = 0; //current m4
 		let C_M3 = 0;
 		let r1 = 231.5;
 		let r2 = 221.1;
@@ -289,7 +289,7 @@
 			addShadowedLight(0.5, 1, -1, 0xffaa00, 1);
 			// renderer
 
-			renderer = new THREE.WebGLRenderer({ 
+			renderer = new THREE.WebGLRenderer({
 				antialias: true
 			});
 			renderer.setPixelRatio(window.devicePixelRatio);
@@ -415,14 +415,14 @@
 			renderer.render(scene, camera);
 
 		}
-		
+
 		//xyz 버튼 조작
 		//해 값들을 미리 찾음
 		var m0_arr = new Array(350);
 		var m2_arr = new Array(350);
 		for(var i=0;i<m0_arr.length;i++){
 			m0_arr[i]=i/m0_arr.length*100 + 20;
-			m2_arr[i]=i/m0_arr.length*260 - 130;
+			m2_arr[i]=i/m2_arr.length*260 - 130;
 		}
 		let xyz_array = []
 		let m0_m2 = []
@@ -519,9 +519,9 @@
 					xyz_move_forward()
 				}
 			}
-			
+
 		}
-		
+
 	</script>
 	<script>
 		//움직이는 request와 이벤트리스터 등록
@@ -775,14 +775,14 @@
 				var saveParameters = JSON.stringify(temp);
 				console.log(saveParameters);
 				var httpRequest;
-				
+
 				httpRequest = new XMLHttpRequest();
 
 				httpRequest.onreadystatechange = alertContents;
 				httpRequest.open('POST', 'save');
 
 				httpRequest.send(saveParameters);
-				
+
 
 				function alertContents() {
 					if (httpRequest.readyState === XMLHttpRequest.DONE) {
