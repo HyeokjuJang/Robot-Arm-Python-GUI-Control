@@ -604,12 +604,12 @@
 			}
 			//Block 컨트롤 관련 functions
 			function comebackZola(seq){
-				document.getElementById("m0").value = seq.m0;
-				document.getElementById("m1").value = seq.m1;
-				document.getElementById("m2").value = seq.m2;
-				document.getElementById("m3").value = seq.m3;
-				document.getElementById("m4").value = seq.m4;
-				document.getElementById("m5").value = seq.m5;
+				document.getElementById("m0").value = seq.m0*180/Math.PI;
+				document.getElementById("m1").value = seq.m1*180/Math.PI;
+				document.getElementById("m2").value = seq.m2*180/Math.PI;
+				document.getElementById("m3").value = seq.m3*180/Math.PI;
+				document.getElementById("m4").value = seq.m4*180/Math.PI;
+				document.getElementById("m5").value = seq.m5*180/Math.PI;
 			}
 			function makeZolaMan(size=1){
 				var temp_seq;
