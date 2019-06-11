@@ -577,7 +577,7 @@
 			document.getElementById("moveBlockUp").addEventListener('click', moveBlockUp);
 			document.getElementById("moveBlockDown").addEventListener('click', moveBlockDown);
 			document.getElementById("deleteBlock").addEventListener('click', deleteBlock);
-			document.getElementById("testButton").addEventListener('click', makeZolaMan(4));
+			document.getElementById("testButton").addEventListener('click',  function(){makeZolaMan(4);},false);
 
 			function moveRequest() {
 				httpRequest = new XMLHttpRequest();
