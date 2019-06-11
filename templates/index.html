@@ -512,23 +512,27 @@
 		function xyz_move_backward(){
 			document.getElementById("m1").value = parseInt(document.getElementById("m1").value) - 1;
 		}
-		function xyz_move_random(moved){
+		function xyz_move_random(moved=1,size=1){
 			if(moved==0){
 				var move=0
 				if(Math.random()>0.5){
-					xyz_move_forward()
+					for(var i=0;i<4*size;i++)
+						xyz_move_forward()
 					move+=1
 				}
 				if(Math.random()>0.5){
-					xyz_move_backward()
+					for(var i=0;i<4*size;i++)
+						xyz_move_backward()
 					move+=10
 				}
 				if(Math.random()>0.5){
-					xyz_move_left()
+					for(var i=0;i<4*size;i++)
+						xyz_move_left()
 					move+=100
 				}
 				if(Math.random()>0.5){
-					xyz_move_right()
+					for(var i=0;i<4*size;i++)
+						xyz_move_right()
 					move+=1000
 				}
 				return move
@@ -536,19 +540,23 @@
 			else{
 				if(moved-1000>=0){
 					moved-=1000
-					xyz_move_right()
+					for(var i=0;i<4*size;i++)
+						xyz_move_right()
 				}
 				if(moved-100>=0){
 					moved-=100
-					xyz_move_left()
+					for(var i=0;i<4*size;i++)
+						xyz_move_left()
 				}
 				if(moved-10>=0){
 					moved-=10
-					xyz_move_backward()
+					for(var i=0;i<4*size;i++)
+						xyz_move_backward()
 				}
 				if(moved-1>=0){
 					moved-=1
-					xyz_move_forward()
+					for(var i=0;i<4*size;i++)
+						xyz_move_forward()
 				}
 			}
 
@@ -595,89 +603,89 @@
 				}
 			}
 			//Block 컨트롤 관련 functions
-			function makeZolaMan(){
+			function makeZolaMan(size=1){
 				// 먼저 그림을 그릴 베이스 포인트로 로봇팔을 가져감 붓은 그릴 곳으로부터 4틱 떨어져있음.
-				for(var i=0;i<8;i++) // 머리 점찍고
+				for(var i=0;i<4*size;i++) // 머리 점찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 다시 내리고
+				for(var i=0;i<4*size;i++) // 다시 내리고
 					xyz_move_down()
 				createBlock('currentData')
-				for(var i=0;i<4;i++) // 몸통쪽으로 내려와서
+				for(var i=0;i<2*size;i++) // 몸통쪽으로 내려와서
 					xyz_move_left()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 점 찍고
+				for(var i=0;i<4*size;i++) // 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 왼쪽 팔 그리고
+				for(var i=0;i<4*size;i++) // 왼쪽 팔 그리고
 					xyz_move_forward()
-				var rand = xyz_move_random(0) // 랜덤 무브
+				var rand = xyz_move_random(0,size) // 랜덤 무브
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 붓 내리기
+				for(var i=0;i<4*size;i++) // 붓 내리기
 					xyz_move_down()
-				xyz_move_random(rand) // 랜덤도 돌아오기
+				xyz_move_random(rand,size) // 랜덤도 돌아오기
 				createBlock('currentData')
-				for(var i=0;i<8;i++)  // 다시 몸통으로 컴백
+				for(var i=0;i<4*size;i++)  // 다시 몸통으로 컴백
 					xyz_move_backward()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 몸통 점 찍고
+				for(var i=0;i<4*size;i++) // 몸통 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<8;i++)  // 오른쪽 팔 그리기
+				for(var i=0;i<4*size;i++)  // 오른쪽 팔 그리기
 					xyz_move_backward()
-				rand = xyz_move_random(0) // 랜덤 무브
+				rand = xyz_move_random(0,size) // 랜덤 무브
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 붓 내리기
+				for(var i=0;i<4*size;i++) // 붓 내리기
 					xyz_move_down()
-				xyz_move_random(rand) // 랜덤도 돌아오기
+				xyz_move_random(rand,size) // 랜덤도 돌아오기
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 몸통으로 돌아와서
+				for(var i=0;i<4*size;i++) // 몸통으로 돌아와서
 					xyz_move_forward()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 몸통 점 찍고
+				for(var i=0;i<4*size;i++) // 몸통 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<4;i++) // 왼쪽다리 무릎그리기
+				for(var i=0;i<2*size;i++) // 왼쪽다리 무릎그리기
 					xyz_move_left()
 				xyz_move_forward()
-				rand = xyz_move_random(0)
+				rand = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<4;i++) // 왼쪽다리 발그리기
+				for(var i=0;i<2*size;i++) // 왼쪽다리 발그리기
 					xyz_move_left()
 				xyz_move_forward()
-				var rand1 = xyz_move_random(0)
+				var rand1 = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 붓 내리기
+				for(var i=0;i<4*size;i++) // 붓 내리기
 					xyz_move_down()
 				createBlock('currentData')
-				xyz_move_random(rand) // 랜덤 돌리고
-				xyz_move_random(rand1)
-				for(var i=0;i<8;i++) // 몸통으로 돌아오기
+				xyz_move_random(rand,size) // 랜덤 돌리고
+				xyz_move_random(rand1,size)
+				for(var i=0;i<4*size;i++) // 몸통으로 돌아오기
 					xyz_move_right()
-				for(var i=0;i<4;i++)
+				for(var i=0;i<2*size;i++)
 					xyz_move_backward()
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 몸통 점 찍고
+				for(var i=0;i<4*size;i++) // 몸통 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<4;i++) // 오른쪽다리 무릎그리기
+				for(var i=0;i<2*size;i++) // 오른쪽다리 무릎그리기
 					xyz_move_left()
 				xyz_move_backward()
-				rand = xyz_move_random(0)
+				rand = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<4;i++) // 오른쪽다리 발그리기
+				for(var i=0;i<2*size;i++) // 오른쪽다리 발그리기
 					xyz_move_left()
 				xyz_move_backward()
-				var rand1 = xyz_move_random(0)
+				var rand1 = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<8;i++) // 붓 내리기
+				for(var i=0;i<4*size;i++) // 붓 내리기
 					xyz_move_down()
 				createBlock('currentData')
-				xyz_move_random(rand) // 랜덤 돌리고
-				xyz_move_random(rand1)
-				for(var i=0;i<8;i++) // 몸통으로 돌아오기
+				xyz_move_random(rand,size) // 랜덤 돌리고
+				xyz_move_random(rand1,size)
+				for(var i=0;i<4*size;i++) // 몸통으로 돌아오기
 					xyz_move_right()
-				for(var i=0;i<4;i++)
+				for(var i=0;i<2*size;i++)
 					xyz_move_forward()
 				createBlock('currentData')
 				//끝
