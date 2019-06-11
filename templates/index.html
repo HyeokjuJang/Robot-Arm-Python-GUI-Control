@@ -448,7 +448,7 @@
 		}
 		function xyz_move_up(draw=0){
 			var [c_x,c_y]=calc_xy();
-			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y+3)]
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y+4)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			if(draw == 0){
@@ -463,7 +463,7 @@
 		}
 		function xyz_move_down(draw=0){
 			var [c_x,c_y]=calc_xy();
-			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y-3)]
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x,c_y-4)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			if(draw == 0){
@@ -478,7 +478,7 @@
 		}
 		function xyz_move_left(draw=0){
 			var [c_x,c_y]=calc_xy();
-			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x-3,c_y)]
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			if(draw == 0){
@@ -493,7 +493,7 @@
 		}
 		function xyz_move_right(draw=0){
 			var [c_x,c_y]=calc_xy();
-			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x+3,c_y)]
+			var [m0_v, m2_v] = m0_m2[find_nearest(xyz_array,c_x+4,c_y)]
 			document.getElementById("m0").value = m0_v;
 			document.getElementById("m2").value = m2_v;
 			if(draw == 0){
@@ -577,7 +577,7 @@
 			document.getElementById("moveBlockUp").addEventListener('click', moveBlockUp);
 			document.getElementById("moveBlockDown").addEventListener('click', moveBlockDown);
 			document.getElementById("deleteBlock").addEventListener('click', deleteBlock);
-			document.getElementById("testButton").addEventListener('click',  function(){makeZolaMan(4);},false);
+			document.getElementById("testButton").addEventListener('click',  function(){makeZolaMan(2);},false);
 
 			function moveRequest() {
 				httpRequest = new XMLHttpRequest();
