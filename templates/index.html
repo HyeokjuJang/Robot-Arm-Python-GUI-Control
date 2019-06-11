@@ -516,22 +516,22 @@
 			if(moved==0){
 				var move=0
 				if(Math.random()>0.5){
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_forward()
 					move+=1
 				}
 				if(Math.random()>0.5){
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_backward()
 					move+=10
 				}
 				if(Math.random()>0.5){
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_left()
 					move+=100
 				}
 				if(Math.random()>0.5){
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_right()
 					move+=1000
 				}
@@ -540,22 +540,22 @@
 			else{
 				if(moved-1000>=0){
 					moved-=1000
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_right()
 				}
 				if(moved-100>=0){
 					moved-=100
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_left()
 				}
 				if(moved-10>=0){
 					moved-=10
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_backward()
 				}
 				if(moved-1>=0){
 					moved-=1
-					for(var i=0;i<4*size;i++)
+					for(var i=0;i<2*size;i++)
 						xyz_move_forward()
 				}
 			}
@@ -657,17 +657,19 @@
 				//for(var i=0;i<4*size;i++) // 몸통으로 돌아와서
 				//	xyz_move_forward()
 				comebackZola(temp_seq)
+				for(var i=0;i<3*size;i++) // 왼쪽다리 무릎그리기
+					xyz_move_left()
 				createBlock('currentData')
 				for(var i=0;i<4*size;i++) // 몸통 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<2*size;i++) // 왼쪽다리 무릎그리기
+				for(var i=0;i<3*size;i++) // 왼쪽다리 무릎그리기
 					xyz_move_left()
 				for(var i=0;i<2*size;i++)
 					xyz_move_forward()
 				rand = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<2*size;i++) // 왼쪽다리 발그리기
+				for(var i=0;i<3*size;i++) // 왼쪽다리 발그리기
 					xyz_move_left()
 				for(var i=0;i<2*size;i++)
 					xyz_move_forward()
@@ -688,13 +690,13 @@
 				for(var i=0;i<4*size;i++) // 몸통 점 찍고
 					xyz_move_up()
 				createBlock('currentData')
-				for(var i=0;i<2*size;i++) // 오른쪽다리 무릎그리기
+				for(var i=0;i<3*size;i++) // 오른쪽다리 무릎그리기
 					xyz_move_left()
 				for(var i=0;i<2*size;i++)
 					xyz_move_backward()
 				rand = xyz_move_random(0,size)
 				createBlock('currentData')
-				for(var i=0;i<2*size;i++) // 오른쪽다리 발그리기
+				for(var i=0;i<3*size;i++) // 오른쪽다리 발그리기
 					xyz_move_left()
 				for(var i=0;i<2*size;i++)
 					xyz_move_backward()
