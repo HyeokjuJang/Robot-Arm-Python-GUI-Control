@@ -8,6 +8,7 @@ from time import sleep
 import RPi.GPIO as gpio
 import math
 import serial
+import random
 
 # 초기 아두이노 시리얼 셋팅
 ser = serial.Serial("/dev/ttyACM0",9600)
@@ -73,6 +74,8 @@ def find_nearest(xyz_array,x,y):
 def calc_xy(r2,r3,m0_v,m2_v):
     return [r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]
 
+def r(n):
+    return random.random()*n
 
 # RANDOM으로 졸라맨 그리는 함수 인풋으로 m1모터의 각도를 받음. m은 모두 라디안
 # m['m0'] 이런식으로 넘겨야함
@@ -100,6 +103,21 @@ def random_zola(m1):
     # 모터 그림 초기화는 모터0 60도 모터2 -60도
     motor[0] = 60
     motor[2] = -60
+
+    # 손쉬운 튜닝을 위한 변수들 랜덤도 여기에 추가
+    # 랜덤함수 r(max값)
+    brush_h = 10
+    h2b = 6*r(2)
+    b2la = [3*r(2),2*r(2)]
+    la2lh = [2*r(2),2*r(2)]
+    b2ra = [3*r(2),2*r(2)]
+    ra2rh = [2*r(2),2*r(2)]
+    b2b = 10*r(2)
+    b2ln = [2*r(2),4*r(2)]
+    ln2lf = [2*r(2),4*r(2)]
+    b2rn = [2*r(2),4*r(2)]
+    rn2rf = [2*r(2),4*r(2)]
+
     # 현재 위치 계산하고 가장 가까운 모터0,2 찾고 모터4를 직각으로 할당하고 append
     [c_x,c_y] = calc_xy(r2,r3,motor[0],motor[2])
     [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y)]
@@ -109,7 +127,7 @@ def random_zola(m1):
 
     #머리 점찍기
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
@@ -118,28 +136,34 @@ def random_zola(m1):
 
     #몸통으로 이동
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-6,c_y)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-h2b,c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
     body = m[len(m)-1]
 
     #몸통 점찍기
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #왼팔꿈치
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]+=3
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[1]+=b2la[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+b2la[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #왼손
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]+=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[1]+=la2lh[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+la2lh[1],c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #붓 떼고
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
@@ -148,15 +172,21 @@ def random_zola(m1):
 
     #오른팔꿈치
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]-=3
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[1]-=b2ra[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+b2ra[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #오른손
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]-=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[1]-=ra2rh[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+ra2rh[1],c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #붓 떼고
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
@@ -165,34 +195,34 @@ def random_zola(m1):
 
     #몸통 점찍기
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #골반으로 이동
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-10,c_y)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-b2b,c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
     belly = m[len(m)-1]
 
     #왼쪽무릎
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]+=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[1]+=b2ln[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-b2ln[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #왼쪽발
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]+=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[1]+=ln2lf[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-ln2lf[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #붓 떼고
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-10)]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
@@ -201,20 +231,24 @@ def random_zola(m1):
 
     #오른쪽무릎
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]-=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[1]-=b2rn[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-b2rn[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #오른쪽발
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
-    motor[1]-=2
-    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[1]-=rn2rf[0]
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-rn2rf[1],c_y)]
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
+    #붓 떼고
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
-    print(m)
     for motor_s in m:
         motor_busy = move_motor(motor_s)
         while motor_busy:
