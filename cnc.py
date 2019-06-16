@@ -57,17 +57,176 @@ def read_json(m):
     # 파일에서 json을 읽어오기
     try:
         filename = m + '.json'
-        with open(filename) as json_file:  
+        with open(filename) as json_file:
             json_data = json.load(json_file)
     except:
         return "noData"
     return json_data
 
+#랜덤에서 활용할 함수
+def find_nearest(xyz_array,x,y):
+    distance=[]
+    for i in range(len(xyz_array)):
+        distance.append((xyz_array[i][0]-x)*(xyz_array[i][0]-x) + (xyz_array[i][1]-y)*(xyz_array[i][1]-y))
+    return distance.index(min(distance))
+
+def calc_xy(r2,r3,m0_v,m2_v):
+    return [r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]
+
+
+# RANDOM으로 졸라맨 그리는 함수 인풋으로 m1모터의 각도를 받음. m은 모두 라디안
+# m['m0'] 이런식으로 넘겨야함
+def random_zola(m1):
+    motor = [0,0,0,0,0,0]
+    r1=231.5
+    r2=221.1
+    r3=223
+    r4=70
+    motor[1] = m1 * math.pi / 180 # 라디안으로 변환
+    m = []
+    # 위아래좌우 움직일 정답 표 생성
+    m0_arr = [0 for i in range(350)]
+    m2_arr = [0 for i in range(350)]
+    for i in range(len(m0_arr)):
+        m0_arr[i]=i/len(m0_arr)*40;
+        m2_arr[i]=-i/len(m2_arr)*130;
+
+    xyz_array = []
+    m0_m2 = []
+    for m0_v in m0_arr:
+        for m2_v in m2_arr:
+            xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
+            m0_m2.append([m0_v,m2_v])
+    # 모터 그림 초기화는 모터0 60도 모터2 -60도
+    motor[0] = 60
+    motor[2] = -60
+    # 현재 위치 계산하고 가장 가까운 모터0,2 찾고 모터4를 직각으로 할당하고 append
+    [c_x,c_y] = calc_xy(r2,r3,motor[0],motor[2])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+    head=m[len(m)-1]
+
+    #머리 점찍기
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #점찍고 내려오기
+    m.append(head)
+
+    #몸통으로 이동
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-6,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+    body = m[len(m)-1]
+
+    #몸통 점찍기
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #왼팔꿈치
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]+=3
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #왼손
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]+=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #몸통 돌아오기
+    m.append(body)
+
+    #오른팔꿈치
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]-=3
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #오른손
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]-=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x+2,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #몸통 돌아오기
+    m.append(body)
+
+    #몸통 점찍기
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+10)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #골반으로 이동
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-10,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+    belly = m[len(m)-1]
+
+    #왼쪽무릎
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]+=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #왼쪽발
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]+=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #붓 떼고
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-10)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #골반으로 이동
+    m.append(belly)
+
+    #오른쪽무릎
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]-=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #오른쪽발
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"],m[len(m)-1]["m2"])
+    motor[1]-=2
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x-4,c_y)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+
+    print(m)
+    for motor_s in m:
+        motor_busy = move_motor(motor_s)
+        while motor_busy:
+            sleep(0.1)
+        motor_busy = 1
+    return 0
+
 def move_motor(motor):
-    c_m_p=[]
     gpio.setmode(gpio.BCM)
     gpio.setup(DIR, gpio.OUT)
     gpio.setup(STEP, gpio.OUT)
+    c_m_p=[]
     try:
         f = open("c_m_p.txt", 'r')
         for i in range(6):
@@ -80,17 +239,19 @@ def move_motor(motor):
     if len(c_m_p) < 6:
         c_m_p = [0,0,0,0,0,0]
     min_speed = 0.001
-    max_speed = 0.0002
-    acc = 0.00005
+    max_speed = 0.0003
+    acc = 0.000003
     gap = (min_speed-max_speed)/acc
     duration = min_speed
-    m=[]
+    m=[] # m은 라디안 값을 갖음. 2/PI*step 인 이유는 스텝이 90도를 기준으로 표준화하기 때문
     m.append(int((motor['m0'] - c_m_p[0])*2/math.pi*motor_steps[0]))
     m.append(int((motor['m1'] - c_m_p[1])*2/math.pi*motor_steps[1]))
     m.append(-int((motor['m2'] - c_m_p[2])*2/math.pi*motor_steps[2]))#방향이 반대라서 - 붙임
     m.append(int((motor['m3'] - c_m_p[3])*2/math.pi*motor_steps[3]))
-    m.append(int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))
+    m.append(-int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))#방향이 반대라서 - 붙임
     m.append(int((motor['m5'] - c_m_p[5])*2/math.pi*motor_steps[5]))
+    # DEBUG:
+    print(m)
     #방향 정하고
     for i in range(len(m)):
         if m[i] > 0:
@@ -100,7 +261,7 @@ def move_motor(motor):
             m[i]=-m[i]
     # max step 찾고
     max_step = m[0]
-    
+
     for a in m:
         if max_step<a:
             max_step = a
@@ -115,7 +276,7 @@ def move_motor(motor):
     check_m = [0,0,0,0,0,0]
     current_step = 0
 
-    
+
 
     # for문 돌고
     for i in range(max_step):
@@ -127,20 +288,21 @@ def move_motor(motor):
         # 돌면서 나눈 스텝 끝난애들 멈추고
         for i in range(len(m)):
             gpio.output(STEP[i],gpio.LOW)
-            if check_m[i] == m_div_step[i]:
+            check_m[i]+=1
+            if check_m[i] >= m_div_step[i]:
                 check_m[i]=0
-            else:
-                check_m[i]+=1
+
         # 스피드는 맥스까지 올렸다가
         # max랑 min 사이에 change 차이만큼 남았을 때
         # duration 낮춤
-        if max_step - current_step < gap:
-            duration+=acc
-        elif current_step < gap:
+        if current_step < gap:
             duration-=acc
+        elif max_step - current_step < gap:
+            duration+=acc
 
         current_step += 1
-
+    # DEBUG:
+    print(m)
     f = open("c_m_p.txt", 'w')
     f.write(str(motor['m0'])+'\n')
     f.write(str(motor['m1'])+'\n')
@@ -150,6 +312,7 @@ def move_motor(motor):
     f.write(str(motor['m5'])+'\n')
     f.close()
     gpio.cleanup()
+    sleep(0.4)
     return 0
 
 # 아두이노에 Gcode 날려주는 함수

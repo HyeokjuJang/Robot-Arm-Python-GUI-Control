@@ -103,7 +103,7 @@ def move_motor(motor):
     acc = 0.000003
     gap = (min_speed-max_speed)/acc
     duration = min_speed
-    m=[]
+    m=[] # m은 라디안 값을 갖음. 2/PI*step 인 이유는 스텝이 90도를 기준으로 표준화하기 때문
     m.append(int((motor['m0'] - c_m_p[0])*2/math.pi*motor_steps[0]))
     m.append(int((motor['m1'] - c_m_p[1])*2/math.pi*motor_steps[1]))
     m.append(-int((motor['m2'] - c_m_p[2])*2/math.pi*motor_steps[2]))#방향이 반대라서 - 붙임
