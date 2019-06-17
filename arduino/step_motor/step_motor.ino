@@ -79,9 +79,11 @@ void step_move(int x,int y){
     if(y_count<y){
       digitalWrite(Y_STEP_PIN    , HIGH);
     }
-    delay(1);
+    delay(3);
     digitalWrite(X_STEP_PIN    , LOW);
     digitalWrite(Y_STEP_PIN    , LOW);
+    
+    
     x_count++;
     y_count++;
   }
