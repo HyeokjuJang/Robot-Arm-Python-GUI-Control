@@ -48,10 +48,7 @@ def r(n):
 # m['m0'] 이런식으로 넘겨야함
 def random_zola(m1):
     motor = [0,0,0,0,0,0]
-    r1=231.5
-    r2=221.1
-    r3=223
-    r4=70
+
     motor[1] = m1 * math.pi / 180 # 라디안으로 변환
     m = []
 
@@ -395,6 +392,10 @@ if __name__ == "__main__":
         motor_steps = [100,100,100,100,100,100]
     motor_busy = 1
     cnc_busy = 1
+    r1=231.5
+    r2=221.1
+    r3=223
+    r4=70
     # 위아래좌우 움직일 정답 표 생성
     m0_arr = [0 for i in range(350)]
     m2_arr = [0 for i in range(350)]
