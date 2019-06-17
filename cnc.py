@@ -59,15 +59,15 @@ def random_zola(m1):
     # 손쉬운 튜닝을 위한 변수들 랜덤도 여기에 추가
     # 랜덤함수 r(max값)
     brush_h = 20
-    h2b = 10*r(3)
-    b2la = [5*r(3),2*r(2)]
+    h2b = 13*r(2)
+    b2la = [4*r(3),2*r(3)]
     la2lh = [3*r(3),3*r(4)]
-    b2ra = [5*r(3),2*r(2)]
+    b2ra = [4*r(3),2*r(3)]
     ra2rh = [3*r(3),3*r(4)]
     b2b = 12*r(3)
-    b2ln = [2*r(3),10*r(3)]
+    b2ln = [3*r(3),10*r(3)]
     ln2lf = [2*r(3),10*r(3)]
-    b2rn = [2*r(3),10*r(3)]
+    b2rn = [3*r(3),10*r(3)]
     rn2rf = [2*r(3),10*r(3)]
 
     # 현재 위치 계산하고 가장 가까운 모터0,2 찾고 모터4를 직각으로 할당하고 append
@@ -81,6 +81,10 @@ def random_zola(m1):
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"]*180/math.pi,m[len(m)-1]["m2"]*180/math.pi)
     [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+brush_h)]
     motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #조금 돌리기
+    motor[5] = 90
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #점찍고 내려오기
@@ -410,9 +414,9 @@ if __name__ == "__main__":
             xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
             m0_m2.append([m0_v,m2_v])
 
-
+    random_zola(0)
+    '''
     # cnc 움직임
-
     wait_cnc = 1
     wait_cnc = move_cnc(0,0)
     while wait_cnc:
@@ -436,3 +440,4 @@ if __name__ == "__main__":
     while wait_robot:
         sleep(0.1)
     sleep(1)
+    '''
