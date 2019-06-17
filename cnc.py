@@ -62,7 +62,7 @@ def random_zola(m1):
     #캘리브레이션 시도
     size=1
     h2b = (15+r(15))*size
-    b2la = [(25+r(20)*size,(-10+r(35))*size]
+    b2la = [(25+r(20))*size,(-10+r(35))*size]
     la2lh = [(15+r(15))*size,(-20+r(40))*size]
     b2ra = [(25+r(20))*size,(-10+r(35))*size]
     ra2rh = [(15+r(15))*size,(-20+r(40))*size]
