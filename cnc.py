@@ -429,8 +429,8 @@ if __name__ == "__main__":
             xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
             m0_m2.append([m0_v,m2_v])
 
-    #random_zola(0)
-    #'''
+    random_zola(0)
+    '''
     # cnc 움직임
     for i in range(2):
         for j in range(3):
@@ -445,4 +445,4 @@ if __name__ == "__main__":
             while wait_robot:
                 sleep(0.1)
             sleep(1)
-    #'''
+    '''
