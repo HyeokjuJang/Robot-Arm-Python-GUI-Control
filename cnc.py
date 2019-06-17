@@ -42,7 +42,7 @@ def calc_xy(r2,r3,m0_v,m2_v):
     return [r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]
 
 def r(n):
-    return random.random()*n
+    return random.random()*2*n-n
 
 # RANDOM으로 졸라맨 그리는 함수 인풋으로 m1모터의 각도를 받음. m은 모두 라디안
 # m['m0'] 이런식으로 넘겨야함
