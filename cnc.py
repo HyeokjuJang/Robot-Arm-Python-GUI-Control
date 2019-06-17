@@ -75,15 +75,15 @@ def random_zola(m1):
     # 랜덤함수 r(max값)
     brush_h = 20
     h2b = 10*r(3)
-    b2la = [3*r(2),8*r(3)]
-    la2lh = [2*r(2),8*r(3)]
-    b2ra = [3*r(2),8*r(3)]
-    ra2rh = [2*r(2),8*r(3)]
-    b2b = 15*r(2)
-    b2ln = [2*r(2),10*r(3)]
-    ln2lf = [2*r(2),10*r(3)]
-    b2rn = [2*r(2),10*r(3)]
-    rn2rf = [2*r(2),10*r(3)]
+    b2la = [4*r(2),8*r(3)]
+    la2lh = [3*r(2),8*r(3)]
+    b2ra = [4*r(2),8*r(3)]
+    ra2rh = [3*r(2),8*r(3)]
+    b2b = 10*r(6)
+    b2ln = [2*r(3),10*r(3)]
+    ln2lf = [2*r(3),10*r(3)]
+    b2rn = [2*r(3),10*r(3)]
+    rn2rf = [2*r(3),10*r(3)]
 
     # 현재 위치 계산하고 가장 가까운 모터0,2 찾고 모터4를 직각으로 할당하고 append
     [c_x,c_y] = calc_xy(r2,r3,motor[0],motor[2])
@@ -136,6 +136,12 @@ def random_zola(m1):
 
     #몸통 돌아오기
     m.append(body)
+
+    #몸통 점찍기
+    [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"]*180/math.pi,m[len(m)-1]["m2"]*180/math.pi)
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y+brush_h)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
     #오른팔꿈치
     [c_x,c_y] = calc_xy(r2,r3,m[len(m)-1]["m0"]*180/math.pi,m[len(m)-1]["m2"]*180/math.pi)
