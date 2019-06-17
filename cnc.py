@@ -203,9 +203,10 @@ def random_zola(m1):
     [c_x,c_y] = calc_xy(r2,r3,belly["m0"]*180/math.pi,belly["m2"]*180/math.pi)
     [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
     motor[4] = -motor[0]-motor[2];
+    motor[1] = belly["m1"]
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
-    #붓 대기
+    #붓 대기 
     m.append(belly)
 
     #오른쪽무릎
