@@ -410,35 +410,29 @@ if __name__ == "__main__":
             xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
             m0_m2.append([m0_v,m2_v])
 
-    random_zola(0)
-    random_zola(10)
-    random_zola(-10)
-    '''
-    # 메인 뤂
-    while True:
-        # cnc 움직임
 
-        wait_cnc = 1
-        wait_cnc = move_cnc(3000,3000)
-        while wait_cnc:
-            sleep(0.1)
-        sleep(1)
-        # 로봇팔 움직임
-        wait_robot = 1
-        wait_robot = move_robotarm("jola1")
-        while wait_robot:
-            sleep(0.1)
-        sleep(1)
-        # cnc 움직임
-        wait_cnc = 1
-        wait_cnc = move_cnc(0,0)
-        while wait_cnc:
-            sleep(0.1)
-        sleep(1)
-        # 로봇팔 움직임
-        wait_robot = 1
-        wait_robot = move_robotarm("jola2")
-        while wait_robot:
-            sleep(0.1)
-        sleep(1)
-        '''
+    # cnc 움직임
+
+    wait_cnc = 1
+    wait_cnc = move_cnc(0,0)
+    while wait_cnc:
+        sleep(0.1)
+    sleep(1)
+    # 로봇팔 움직임
+    wait_robot = 1
+    wait_robot = random_zola(0)
+    while wait_robot:
+        sleep(0.1)
+    sleep(1)
+    # cnc 움직임
+    wait_cnc = 1
+    wait_cnc = move_cnc(300,300)
+    while wait_cnc:
+        sleep(0.1)
+    sleep(1)
+    # 로봇팔 움직임
+    wait_robot = 1
+    wait_robot = random_zola(0)
+    while wait_robot:
+        sleep(0.1)
+    sleep(1)
