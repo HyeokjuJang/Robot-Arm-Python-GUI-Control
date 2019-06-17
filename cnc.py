@@ -79,7 +79,7 @@ def random_zola(m1):
     la2lh = [3*r(2),8*r(3)]
     b2ra = [4*r(2),8*r(3)]
     ra2rh = [3*r(2),8*r(3)]
-    b2b = 10*r(6)
+    b2b = 10*r(3)
     b2ln = [2*r(3),10*r(3)]
     ln2lf = [2*r(3),10*r(3)]
     b2rn = [2*r(3),10*r(3)]
@@ -199,7 +199,13 @@ def random_zola(m1):
     motor[4] = -motor[0]-motor[2];
     m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
 
-    #골반으로 이동
+    #붓 대기 전골반으로 이동
+    [c_x,c_y] = calc_xy(r2,r3,belly["m0"]*180/math.pi,belly["m2"]*180/math.pi)
+    [motor[0], motor[2]] = m0_m2[find_nearest(xyz_array,c_x,c_y-brush_h)]
+    motor[4] = -motor[0]-motor[2];
+    m.append({'m0':motor[0]*math.pi/180,'m1':motor[1]*math.pi/180,'m2':motor[2]*math.pi/180,'m3':motor[3]*math.pi/180,'m4':motor[4]*math.pi/180,'m5':motor[5]*math.pi/180})
+
+    #붓 대기
     m.append(belly)
 
     #오른쪽무릎
