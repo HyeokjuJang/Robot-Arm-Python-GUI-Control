@@ -9,40 +9,7 @@ import RPi.GPIO as gpio
 import math
 import serial
 import random
-
-# 초기 아두이노 시리얼 셋팅
-ser = serial.Serial("/dev/ttyACM0",9600)
-sleep(5)
-ser.flushInput()
-ser.flushOutput()
-# 로봇팔 초기 셋팅
-#GPIO Settings
-DIR = [26,22,6,17,25,23]
-STEP = [13,27,5,4,12,24]
-CW =1
-CCW =0
-
-f = open("c_m_p.txt", 'w')
-f.write(str(0)+'\n')
-f.write(str(0)+'\n')
-f.write(str(0)+'\n')
-f.write(str(0)+'\n')
-f.write(str(0)+'\n')
-f.write(str(0)+'\n')
-f.close()
-# step setup 90도당 몇스텝이냐.
-motor_steps = []
-try:
-    f = open("steps.txt", 'r')
-    for i in range(6):
-        line =f.readline()
-        motor_steps.append(int(line))
-        if not line: break
-    f.close()
-except:
-    motor_steps = [100,100,100,100,100,100]
-motor_busy = 1
-cnc_busy = 1
+import sys
 
 # JSON불러와서 로봇팔 움직이는 함수
 def move_robotarm(file_name):
@@ -260,6 +227,7 @@ def move_motor(motor):
     gpio.setmode(gpio.BCM)
     gpio.setup(DIR, gpio.OUT)
     gpio.setup(STEP, gpio.OUT)
+
     c_m_p=[]
     try:
         f = open("c_m_p.txt", 'r')
@@ -285,7 +253,7 @@ def move_motor(motor):
     m.append(-int((motor['m4'] - c_m_p[4])*2/math.pi*motor_steps[4]))#방향이 반대라서 - 붙임
     m.append(int((motor['m5'] - c_m_p[5])*2/math.pi*motor_steps[5]))
     # DEBUG:
-    print(m)
+
     #방향 정하고
     for i in range(len(m)):
         if m[i] > 0:
@@ -359,29 +327,68 @@ def move_cnc(x,y):
         sleep(0.1)
     return 0
 
-# 메인 뤂
-while True:
-    # cnc 움직임
-    wait_cnc = 1
-    wait_cnc = move_cnc(3000,3000)
-    while wait_cnc:
-        sleep(0.1)
-    sleep(1)
-    # 로봇팔 움직임
-    wait_robot = 1
-    wait_robot = move_robotarm("jola1")
-    while wait_robot:
-        sleep(0.1)
-    sleep(1)
-    # cnc 움직임
-    wait_cnc = 1
-    wait_cnc = move_cnc(0,0)
-    while wait_cnc:
-        sleep(0.1)
-    sleep(1)
-    # 로봇팔 움직임
-    wait_robot = 1
-    wait_robot = move_robotarm("jola2")
-    while wait_robot:
-        sleep(0.1)
-    sleep(1)
+
+if __name__ == "__main__":
+    for arg in sys.argv[1:]:
+        if arg == "reset":
+            f = open("c_m_p.txt", 'w')
+            f.write(str(0)+'\n')
+            f.write(str(0)+'\n')
+            f.write(str(0)+'\n')
+            f.write(str(0)+'\n')
+            f.write(str(0)+'\n')
+            f.write(str(0)+'\n')
+            f.close()
+    # 초기 아두이노 시리얼 셋팅
+    ser = serial.Serial("/dev/ttyACM0",9600)
+    sleep(5)
+    ser.flushInput()
+    ser.flushOutput()
+    # 로봇팔 초기 셋팅
+    #GPIO Settings
+    DIR = [26,22,6,17,25,23]
+    STEP = [13,27,5,4,12,24]
+    CW =1
+    CCW =0
+
+
+    # step setup 90도당 몇스텝이냐.
+    motor_steps = []
+    try:
+        f = open("steps.txt", 'r')
+        for i in range(6):
+            line =f.readline()
+            motor_steps.append(int(line))
+            if not line: break
+        f.close()
+    except:
+        motor_steps = [100,100,100,100,100,100]
+    motor_busy = 1
+    cnc_busy = 1
+
+    # 메인 뤂
+    while True:
+        # cnc 움직임
+        wait_cnc = 1
+        wait_cnc = move_cnc(3000,3000)
+        while wait_cnc:
+            sleep(0.1)
+        sleep(1)
+        # 로봇팔 움직임
+        wait_robot = 1
+        wait_robot = move_robotarm("jola1")
+        while wait_robot:
+            sleep(0.1)
+        sleep(1)
+        # cnc 움직임
+        wait_cnc = 1
+        wait_cnc = move_cnc(0,0)
+        while wait_cnc:
+            sleep(0.1)
+        sleep(1)
+        # 로봇팔 움직임
+        wait_robot = 1
+        wait_robot = move_robotarm("jola2")
+        while wait_robot:
+            sleep(0.1)
+        sleep(1)
