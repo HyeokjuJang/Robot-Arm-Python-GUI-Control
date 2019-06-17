@@ -58,7 +58,7 @@ def random_zola(m1):
     m0_arr = [0 for i in range(350)]
     m2_arr = [0 for i in range(350)]
     for i in range(len(m0_arr)):
-        m0_arr[i]=i/len(m0_arr)*40;
+        m0_arr[i]=i/len(m0_arr)*90;
         m2_arr[i]=-i/len(m2_arr)*130;
 
     xyz_array = []
