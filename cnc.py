@@ -54,19 +54,7 @@ def random_zola(m1):
     r4=70
     motor[1] = m1 * math.pi / 180 # 라디안으로 변환
     m = []
-    # 위아래좌우 움직일 정답 표 생성
-    m0_arr = [0 for i in range(350)]
-    m2_arr = [0 for i in range(350)]
-    for i in range(len(m0_arr)):
-        m0_arr[i]=i/len(m0_arr)*90;
-        m2_arr[i]=-i/len(m2_arr)*130;
 
-    xyz_array = []
-    m0_m2 = []
-    for m0_v in m0_arr:
-        for m2_v in m2_arr:
-            xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
-            m0_m2.append([m0_v,m2_v])
     # 모터 그림 초기화는 모터0 60도 모터2 -60도
     motor[0] = 60
     motor[2] = -60
@@ -407,9 +395,23 @@ if __name__ == "__main__":
         motor_steps = [100,100,100,100,100,100]
     motor_busy = 1
     cnc_busy = 1
+    # 위아래좌우 움직일 정답 표 생성
+    m0_arr = [0 for i in range(350)]
+    m2_arr = [0 for i in range(350)]
+    for i in range(len(m0_arr)):
+        m0_arr[i]=i/len(m0_arr)*90;
+        m2_arr[i]=-i/len(m2_arr)*130;
+
+    xyz_array = []
+    m0_m2 = []
+    for m0_v in m0_arr:
+        for m2_v in m2_arr:
+            xyz_array.append([r2*math.sin(m0_v*math.pi/180)+r3*math.sin(m0_v*math.pi/180+m2_v*math.pi/180),r2*math.cos(m0_v*math.pi/180)+r3*math.cos(m0_v*math.pi/180+m2_v*math.pi/180)]);
+            m0_m2.append([m0_v,m2_v])
 
     random_zola(0)
-
+    random_zola(10)
+    random_zola(-10)
     '''
     # 메인 뤂
     while True:
