@@ -366,9 +366,13 @@ if __name__ == "__main__":
     motor_busy = 1
     cnc_busy = 1
 
+    random_zola(0)
+
+    '''
     # 메인 뤂
     while True:
         # cnc 움직임
+
         wait_cnc = 1
         wait_cnc = move_cnc(3000,3000)
         while wait_cnc:
@@ -392,3 +396,4 @@ if __name__ == "__main__":
         while wait_robot:
             sleep(0.1)
         sleep(1)
+        '''
